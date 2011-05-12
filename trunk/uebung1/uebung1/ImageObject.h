@@ -9,14 +9,15 @@ public:
 	~ImageObject(void);
 	ImageObject(int numRows, int numCols, int grayLevels);
 
-	int getPixelValue(int index);
+	int* getPixelValue(int index);
 	int getWidth();
 	int getHeight();
 	int getBytesPerPixel();
-	void setPixelValue(int index, int value);
+	char* getImageContent();
+	void setPixelValue(int index, int* values);
 
 private:
-	unsigned char *pictureContent;
+	unsigned char *imageContent;
 	int width;
 	int height;
 	int bpp;

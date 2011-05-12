@@ -8,7 +8,7 @@ ImageObject::ImageObject(void)
 
 ImageObject::ImageObject(unsigned char* pix, int width, int height, int bpp)
 {
-	this->pictureContent=pix;
+	this->imageContent=pix;
 	this->width=width;
 	this->height=height;
 	this->bpp=bpp;
@@ -38,9 +38,14 @@ ImageObject::ImageObject(int numRows, int numCols, int grayLevels){
 
 
 
-int ImageObject::getPixelValue(int index){
+int* ImageObject::getPixelValue(int index){
+	int *pixel = new int[3];
 
-	return pictureContent[index];
+	for(int i=0; i<3; i++){
+		pixel[i] = imageContent[index+i];
+	}
+
+	return pixel;
 }
 
 int ImageObject::getWidth(){
@@ -59,6 +64,13 @@ int ImageObject::getBytesPerPixel(){
 }
 
 
-void ImageObject::setPixelValue(int index, int value){
-	pictureContent[index]=value;
+void ImageObject::setPixelValue(int index, int* values){
+
+	for(int i=0; i<sizeof(values); i++){
+		imageContent[index+i]=values[i];
+	}
+}
+
+char* ImageObject::getImageContent(){
+	return this->imageContent;
 }

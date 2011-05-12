@@ -20,12 +20,18 @@ int main(array<System::String ^> ^args)
 	Application::Run(gcnew Form1());
 	
 
-
-	bool loaded = ImageLoader::loadImage(1768, 1182, 8, "F:\\HTW\\1.semester\\Programmierung\\Uebung\\discharge.jpg");
+	//////////////////////start keyer/////////////////////////////////////////////
+	ImageObject discharge = ImageLoader::loadImage(1768, 1182, 8, "F:\\HTW\\1.semester\\Programmierung\\Uebung\\discharge.jpg");
+	ImageObject background = ImageLoader::loadImage(1768, 1182, 8, "F:\\HTW\\1.semester\\Programmierung\\Uebung\\background.jpg");
+	
 	ChromaKey chromaKeyer;
-	//chromaKeyer.keyImage(ImageObject dischargedImage, ImageObject backgroundImage, int b, int g, int r);
+	ImageObject final = chromaKeyer.keyImage(discharge, background, 254, 0, 0);
 
-	cout << "loaded :" << loaded << endl;
+	htwSaveImage("F:\\HTW\\1.semester\\Programmierung\\Uebung\\final.jpg", final.getImageContent(), 1768, 1182, 8 );
+	///////////////////////end///////////////////////////////////////////////////
+
+
+	//cout << "loaded :" << loaded << endl;
 
 	return 0;
 }
