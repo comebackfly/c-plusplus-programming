@@ -5,9 +5,11 @@
 #include <iostream>
 
 
-bool ImageLoader::loadImage(int w, int h, int bpp, std::string path){
+ImageObject ImageLoader::loadImage(int w, int h, int bpp, std::string path){
 	const char* fileName = path.c_str();
-	unsigned char *pix = (unsigned char *)htwOpenImage( "F:\\HTW\\1.semester\\Programmierung\\Uebung\\discharge.jpg", &w, &h, &bpp );
+	unsigned char *pix = (unsigned char *)htwOpenImage( &fileName, &w, &h, &bpp );
+
+	ImageObject image*;
   
 	if( !pix ){
 		 // Bild konnte nicht geladen werden
@@ -16,11 +18,11 @@ bool ImageLoader::loadImage(int w, int h, int bpp, std::string path){
 	}else if( bpp==3 ){
 		 // Farbbild in eigene Struktur kopieren
 		std::cout << "in :"  << std::endl;
-		//ImageObject image = new ImageObject(*pix, w, h, bpp);
+		image = new ImageObject(pix, w, h, bpp);
 	}
 
 	  //Destruktor
 	htwDeleteImage( pix ); 
 
-	return true;
+	return image;
 }
