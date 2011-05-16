@@ -71,6 +71,6 @@ void ImageObject::setPixelValue(int index, int* values){
 	}
 }
 
-char* ImageObject::getImageContent(){
+unsigned char* ImageObject::getImageContent(){
 	return this->imageContent;
 }
