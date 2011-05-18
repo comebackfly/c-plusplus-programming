@@ -279,7 +279,7 @@ namespace ChromaKeyer {
 			this->tbxTest->ReadOnly = true;
 			this->tbxTest->Size = System::Drawing::Size(353, 20);
 			this->tbxTest->TabIndex = 6;
-			this->tbxTest->Text = L"test-Ausgabe";
+			this->tbxTest->Text = L"Laden Sie zuerst ein Vordergrund Bild hoch";
 			// 
 			// grpColorCtrl
 			// 
@@ -478,7 +478,6 @@ namespace ChromaKeyer {
 			// 
 			// pictureBoxErgebnis
 			// 
-			this->pictureBoxErgebnis->Enabled = false;
 			this->pictureBoxErgebnis->Location = System::Drawing::Point(6, 48);
 			this->pictureBoxErgebnis->Name = L"pictureBoxErgebnis";
 			this->pictureBoxErgebnis->Size = System::Drawing::Size(296, 198);
@@ -777,22 +776,18 @@ namespace ChromaKeyer {
 				 // Farbwerte und Toleranz an Keying Klasse uebergeben
 				 grpErgebnis->Enabled = "True";
 				 btnKeying->Enabled = "False";
+				 tbxTest->Text = "bitte warten...";
 				 ChromaKey keyer;
-				 if(discharge->getHeight() == background->getHeight() && discharge->getWidth() == background->getWidth()) {
+				 if(discharge->getHeight() <= background->getHeight() && discharge->getWidth() <= background->getWidth()) {
 					 final = keyer.keyImage(discharge,background,pictureBoxCol->BackColor.B, pictureBoxCol->BackColor.G, pictureBoxCol->BackColor.R, System::Convert::ToInt32(txtColTol->Text));
-					 //System::Windows::Forms::MessageBox::Show(System::Convert::ToString(final->getHeight()));
-					 if(htwSaveImage("C:\\temp.jpg",final->getImageContent(),final->getWidth(), final->getHeight(),final->getBytesPerPixel())) {
-						 pictureBoxErgebnis->Image = Image::FromFile("C:\\temp.jpg");
-						 //pictureBoxErgebnis->Image = Image::FromStream((System::IO::Stream)(final->getImageContent()));
+					 if(htwSaveImage("C:\\Windows\\Temp\\temp.jpg",final->getImageContent(),final->getWidth(), final->getHeight(),final->getBytesPerPixel())) {
+						 pictureBoxErgebnis->Image = Image::FromFile("C:\\Windows\\Temp\\temp.jpg");
+						 tbxTest->Text="fertig!";
 					 }
-				 } else System::Windows::Forms::MessageBox::Show("Die beiden Bilder muessen gleich gross sein!");
+				 } else System::Windows::Forms::MessageBox::Show("Das Vordergrundbild darf nicht hoeher oder breiter als der Hintergrundbild sein!");
 			 }
 	// speichert das Ergebnisbild auf der Festplatte mit saveFileDialog
 	private: System::Void btnSpeichern_Click(System::Object^  sender, System::EventArgs^  e) {
-				 //System::IO::Stream^ myStream ;
-				 //System::IO::Stream fs = saveFileErgebnis->OpenFile();
-				 //fs->Close();
-
 				 saveFileErgebnis->Filter = "Jpeg Image|*.jpg";
 				 saveFileErgebnis->Title = "Bild speichern";
 				 saveFileErgebnis->ShowDialog();
@@ -811,8 +806,8 @@ namespace ChromaKeyer {
 				 delete pictureBoxBild1->Image;
 				 delete pictureBoxBild2->Image;
 
-				 if(System::IO::File::Exists("C:\\temp.jpg")) {
-					 System::IO::File::Delete("C:\\temp.jpg");
+				 if(System::IO::File::Exists("C:\\Windows\\Temp\\temp.jpg")) {
+					 System::IO::File::Delete("C:\\Windows\\Temp\\temp.jpg");
 				 }
 			 }
 	};
