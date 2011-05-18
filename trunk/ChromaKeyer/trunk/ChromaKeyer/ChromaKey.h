@@ -1,5 +1,4 @@
 #pragma once
-#include "filter.h"
 #include "ImageObject.h"
 
 class ChromaKey
@@ -17,6 +16,5 @@ private:
 	int keyColor;
 	ImageObject* dischargedImage;
 	ImageObject* backgroundImage;
-
 };
 
