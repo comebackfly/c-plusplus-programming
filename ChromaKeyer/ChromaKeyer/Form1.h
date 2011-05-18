@@ -18,7 +18,7 @@ namespace ChromaKeyer {
 	using namespace System::Windows::Forms;
 	using namespace System::Data;
 	using namespace System::Drawing;
-	
+
 
 	/// <summary>
 	/// Summary for Form1
@@ -29,7 +29,7 @@ namespace ChromaKeyer {
 		Form1(void)
 		{
 			InitializeComponent();
-	
+
 			//
 			//TODO: Add the constructor code here
 			//
@@ -87,9 +87,10 @@ namespace ChromaKeyer {
 	private: System::Windows::Forms::Label^  lblKeyingHelp;
 	private: System::Windows::Forms::PictureBox^  pictureBoxCol;
 	private: System::ComponentModel::IContainer^  components;
-			ImageObject* discharge;
-			ImageObject* background;
 	private: System::Windows::Forms::SaveFileDialog^  saveFileErgebnis;
+			 // ImageObject fuer vordergr.- hintergr.- und ergebnisbild
+			 ImageObject* discharge;
+			 ImageObject* background;
 			 ImageObject* final;
 
 
@@ -182,7 +183,6 @@ namespace ChromaKeyer {
 			this->pictureBoxBild2->SizeMode = System::Windows::Forms::PictureBoxSizeMode::StretchImage;
 			this->pictureBoxBild2->TabIndex = 1;
 			this->pictureBoxBild2->TabStop = false;
-			this->pictureBoxBild2->Click += gcnew System::EventHandler(this, &Form1::pictureBoxBild2_Click);
 			// 
 			// grpBild1
 			// 
@@ -267,12 +267,10 @@ namespace ChromaKeyer {
 			// openFile1
 			// 
 			this->openFile1->FileName = L"File1";
-			this->openFile1->FileOk += gcnew System::ComponentModel::CancelEventHandler(this, &Form1::openFile1_FileOk);
 			// 
 			// openFile2
 			// 
 			this->openFile2->FileName = L"File2";
-			this->openFile2->FileOk += gcnew System::ComponentModel::CancelEventHandler(this, &Form1::openFile2_FileOk);
 			// 
 			// tbxTest
 			// 
@@ -282,7 +280,6 @@ namespace ChromaKeyer {
 			this->tbxTest->Size = System::Drawing::Size(353, 20);
 			this->tbxTest->TabIndex = 6;
 			this->tbxTest->Text = L"test-Ausgabe";
-			this->tbxTest->TextChanged += gcnew System::EventHandler(this, &Form1::tbxTest_TextChanged);
 			// 
 			// grpColorCtrl
 			// 
@@ -544,6 +541,7 @@ namespace ChromaKeyer {
 			this->Controls->Add(this->grpBild1);
 			this->Name = L"Form1";
 			this->Text = L"Form1";
+			this->FormClosed += gcnew System::Windows::Forms::FormClosedEventHandler(this, &Form1::Form1_FormClosed);
 			this->Load += gcnew System::EventHandler(this, &Form1::Form1_Load);
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->pictureBoxBild1))->EndInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->pictureBoxBild2))->EndInit();
@@ -575,246 +573,248 @@ namespace ChromaKeyer {
 			 }
 	private: System::Void groupBox1_Enter(System::Object^  sender, System::EventArgs^  e) {
 			 }
-private: System::Void btnOpenFile1_Click(System::Object^  sender, System::EventArgs^  e) {
-	if(openFile1->ShowDialog() == System::Windows::Forms::DialogResult::OK)
-    {
-		System::IO::StreamReader ^ sr = gcnew
-		System::IO::StreamReader(openFile1->FileName);
-		//MessageBox::Show(sr->ReadToEnd());
-		sr->Close();
-		pictureBoxBild1->Enabled = "True";
-		// load image into picture box
-		pictureBoxBild1->Image = Image::FromFile(openFile1->FileName);
-		discharge = ImageLoader::loadImage(Image::FromFile(openFile1->FileName)->Width,Image::FromFile(openFile1->FileName)->Height,3,HTWStringConverter::Sys2Std(openFile1->FileName));
+	// Oeffnet FileDialog zum Upload von Bild1 (Vordergrund) 
+	private: System::Void btnOpenFile1_Click(System::Object^  sender, System::EventArgs^  e) {
+				 if(openFile1->ShowDialog() == System::Windows::Forms::DialogResult::OK)
+				 {
+					 System::IO::StreamReader ^ sr = gcnew
+						 System::IO::StreamReader(openFile1->FileName);
+					 sr->Close();
+					 pictureBoxBild1->Enabled = "True";
+					 // load image into picture box
+					 pictureBoxBild1->Image = Image::FromFile(openFile1->FileName);
+					 discharge = ImageLoader::loadImage(Image::FromFile(openFile1->FileName)->Width,Image::FromFile(openFile1->FileName)->Height,3,HTWStringConverter::Sys2Std(openFile1->FileName));
+					 tbxTest->Text = "Vordergrundbild erfolgreich geladen.";
+					 grpBild2->Enabled = "True";
+					 grpColorCtrl->Enabled = "True";
+				 }
 
-		grpBild2->Enabled = "True";
-		grpColorCtrl->Enabled = "True";
-	}
+			 }
+	// Oeffnet FileDialog fuer Bild 2 (Hintergrund) Upload
+	private: System::Void btnOpenFile2_Click(System::Object^  sender, System::EventArgs^  e) {
+				 if(openFile2->ShowDialog() == System::Windows::Forms::DialogResult::OK)
+				 {
+					 System::IO::StreamReader ^ sr = gcnew
+						 System::IO::StreamReader(openFile2->FileName);
+					 sr->Close();
+					 pictureBoxBild2->Enabled = "True";
+					 // load image into picture box
+					 pictureBoxBild2->Image = Image::FromFile(openFile2->FileName);
+					 background = ImageLoader::loadImage(Image::FromFile(openFile2->FileName)->Width,Image::FromFile(openFile2->FileName)->Height,3,HTWStringConverter::Sys2Std(openFile2->FileName));
+					 grpKeying->Enabled = "True";
+					 tbxTest->Text = "Hintergrundbild erfolgreich geladen!";
+				 }
 
-		 }
-private: System::Void btnOpenFile2_Click(System::Object^  sender, System::EventArgs^  e) {
-	if(openFile2->ShowDialog() == System::Windows::Forms::DialogResult::OK)
-	{
-		System::IO::StreamReader ^ sr = gcnew
-		System::IO::StreamReader(openFile2->FileName);
-		//MessageBox::Show(sr->ReadToEnd());
-		sr->Close();
-		pictureBoxBild2->Enabled = "True";
-		// load image into picture box
-		pictureBoxBild2->Image = Image::FromFile(openFile2->FileName);
-		
-		System::String^ testStr = "";
-		testStr += openFile2->FileName;
-		testStr += ", ";
-		testStr += Image::FromFile(openFile2->FileName)->Width;
-		testStr += " x ";
-		testStr += Image::FromFile(openFile2->FileName)->Height;
-
-//		Image::loadImage(Image::FromFile(openFile2->FileName)->Width,Image::FromFile(openFile2->FileName)->Height,3,HTWStringConverter::Sys2Std(openFile2->FileName));
-		background = ImageLoader::loadImage(Image::FromFile(openFile2->FileName)->Width,Image::FromFile(openFile2->FileName)->Height,3,HTWStringConverter::Sys2Std(openFile2->FileName));
-		grpKeying->Enabled = "True";
-	}
-
-		 }
-private: System::Void openFile2_FileOk(System::Object^  sender, System::ComponentModel::CancelEventArgs^  e) {
-		 }
-private: System::Void openFile1_FileOk(System::Object^  sender, System::ComponentModel::CancelEventArgs^  e) {
-		 }
-private: System::Void tbxTest_TextChanged(System::Object^  sender, System::EventArgs^  e) {
-		 }
-private: System::Void pictureBoxBild2_Click(System::Object^  sender, System::EventArgs^  e) {
-		 }
-		 // Choose the keying color with mouse click on pictureBox
-private: System::Void pictureBoxBild1_MouseClick(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e) {
-			 // get Cursor Position
-			POINT pos;
-			GetCursorPos(&pos);
-			// Position anpassen an pictureBox Pos. links oben ist 0,0
-			pos.x-=126;
-			pos.y-=188;
-			if(pos.x < 0) {
-				pos.x = 0;
-			}
-			if(pos.y < 0) {
-				pos.y = 0;
-			}
-			// generate Bitmap from Image to get color with GetPixel(x,y)
-			Bitmap^ bm = gcnew Bitmap(pictureBoxBild1->Image);
-			// Color -> RGBA with A = Alpha (ignore)
-			Color col = bm->GetPixel(pos.x,pos.y);
-			pictureBoxCol->BackColor = col;
-			// Testausgaben in Test-Textbox
-			System::String^ testStr2 ="";
-			testStr2+= pos.x;
-			testStr2+=", ";
-			testStr2+= pos.y;
-			testStr2+= " ";
-			testStr2+= col;
-			tbxTest->Text = testStr2;
-			System::String^ colR = "";
-			System::String^ colG = "";
-			System::String^ colB = "";
-			colR += col.R;
-			colG += col.G;
-			colB += col.B;
-			txtColR->Text = colR;
-			txtColG->Text = colG;
-			txtColB->Text = colB;
-		 }
-private: System::Void btnColor_Click(System::Object^  sender, System::EventArgs^  e) {
-			 colDialog->ShowDialog();
-			 System::String^ colorR = "";
-			 System::String^ colorG = "";
-			 System::String^ colorB = "";
-			 colorR += colDialog->Color.R;
-			 colorG += colDialog->Color.G;
-			 colorB += colDialog->Color.B;
-			 txtColR->Text = colorR;
- 			 txtColG->Text = colorG;
-			 txtColB->Text = colorB;
-			 pictureBoxCol->BackColor = colDialog->Color;
-		 }
-private: System::Void txtColTol_TextChanged(System::Object^  sender, System::EventArgs^  e) {
-			int tol;
-			// pruefen ob Wert eine Zahl ist
-			if(!Int32::TryParse(txtColTol->Text, tol)) {
-				// keine Zahl
-				System::Windows::Forms::MessageBox::Show("Wert zwischen 0 und 30 %");
-				//default wert
-				txtColTol->Text = "0";
-			}
-			else {
-				// pruefen ob > 100 oder <0
-				if(System::Convert::ToInt32(txtColTol->Text)>30) {
-					System::Windows::Forms::MessageBox::Show("Wert zwischen 0 und 30 %");
-					txtColTol->Text= "30";
-				} else if(System::Convert::ToInt32(txtColTol->Text)<0) {
-					System::Windows::Forms::MessageBox::Show("Wert zwischen 0 und 30 %");
-					txtColTol->Text= "0";
-				} else {
-					trbColTol->Value = System::Convert::ToInt32(txtColTol->Text);
-				}
-			}
-		}
-private: System::Void trbColTol_Scroll(System::Object^  sender, System::EventArgs^  e) {
-			 txtColTol->Text = System::Convert::ToString(trbColTol->Value);
-		 }
-private: System::Void ttHelp_Popup(System::Object^  sender, System::Windows::Forms::PopupEventArgs^  e) {
-		 }
-private: System::Void txtColR_TextChanged(System::Object^  sender, System::EventArgs^  e) {
-			 int test;
-			  // pruefen ob Wert eine Zahl ist
-			 if(!Int32::TryParse(txtColR->Text, test)) {
-				 // keine Zahl
-				 System::Windows::Forms::MessageBox::Show("Zahlenwert von 0-255!");
-				 txtColR->Text = "0";
-			}
-			else {
-				// pruefen ob > 255 oder <0
-				if(System::Convert::ToInt32(txtColR->Text)>255) {
-					System::Windows::Forms::MessageBox::Show("Zahl darf nicht groesser als 255 sein!");
-					txtColR->Text= "255";
-				} else if(System::Convert::ToInt32(txtColR->Text)<0) {
-					System::Windows::Forms::MessageBox::Show("Zahl darf nicht kleiner als 0 sein!");
-					txtColR->Text= "0";
-				}
-				else {
-					 // alle pruefen ob Werte drin stehen
-					 if((txtColR->Text != "") && (txtColG->Text != "") && (txtColB->Text != "")) { 
-						Color col = Color::FromArgb(255,System::Convert::ToInt32(txtColR->Text),System::Convert::ToInt32(txtColG->Text),System::Convert::ToInt32(txtColB->Text));
-						pictureBoxCol->BackColor = col;
-						
+			 }
+	// Choose the keying color with mouse click on pictureBox
+	private: System::Void pictureBoxBild1_MouseClick(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e) {
+				 // get Cursor Position
+				 POINT pos;
+				 GetCursorPos(&pos);
+				 // Position anpassen an pictureBox Pos. links oben ist 0,0
+				 pos.x-=126;
+				 pos.y-=188;
+				 if(pos.x < 0) {
+					 pos.x = 0;
+				 }
+				 if(pos.y < 0) {
+					 pos.y = 0;
+				 }
+				 // generate Bitmap from Image to get color with GetPixel(x,y)
+				 Bitmap^ bm = gcnew Bitmap(pictureBoxBild1->Image);
+				 // Color -> RGBA with A = Alpha (ignore)
+				 Color col = bm->GetPixel(pos.x,pos.y);
+				 pictureBoxCol->BackColor = col;
+				 // Testausgaben in Test-Textbox
+				 System::String^ testStr2 ="Position: ";
+				 testStr2+= pos.x;
+				 testStr2+=", ";
+				 testStr2+= pos.y;
+				 testStr2+= " Farbe: ";
+				 testStr2+= col;
+				 tbxTest->Text = testStr2;
+				 // set Color into textBox->Text
+				 System::String^ colR = "";
+				 System::String^ colG = "";
+				 System::String^ colB = "";
+				 colR += col.R;
+				 colG += col.G;
+				 colB += col.B;
+				 txtColR->Text = colR;
+				 txtColG->Text = colG;
+				 txtColB->Text = colB;
+			 }
+	// Open ColorPicker to choose the keying color
+	private: System::Void btnColor_Click(System::Object^  sender, System::EventArgs^  e) {
+				 colDialog->ShowDialog();
+				 System::String^ colorR = "";
+				 System::String^ colorG = "";
+				 System::String^ colorB = "";
+				 colorR += colDialog->Color.R;
+				 colorG += colDialog->Color.G;
+				 colorB += colDialog->Color.B;
+				 txtColR->Text = colorR;
+				 txtColG->Text = colorG;
+				 txtColB->Text = colorB;
+				 pictureBoxCol->BackColor = colDialog->Color;
+			 }
+	// color tolerance textfeld. mit pruefung des wertes
+	private: System::Void txtColTol_TextChanged(System::Object^  sender, System::EventArgs^  e) {
+				 int tol;
+				 // pruefen ob Wert eine Zahl ist
+				 if(!Int32::TryParse(txtColTol->Text, tol)) {
+					 // keine Zahl
+					 System::Windows::Forms::MessageBox::Show("Wert zwischen 0 und 30 %");
+					 //default wert
+					 txtColTol->Text = "0";
+				 }
+				 else {
+					 // pruefen ob > 100 oder <0
+					 if(System::Convert::ToInt32(txtColTol->Text)>30) {
+						 System::Windows::Forms::MessageBox::Show("Wert zwischen 0 und 30 %");
+						 txtColTol->Text= "30";
+					 } else if(System::Convert::ToInt32(txtColTol->Text)<0) {
+						 System::Windows::Forms::MessageBox::Show("Wert zwischen 0 und 30 %");
+						 txtColTol->Text= "0";
+					 } else {
+						 trbColTol->Value = System::Convert::ToInt32(txtColTol->Text);
 					 }
-				}
+				 }
 			 }
-		 }
-private: System::Void txtColG_TextChanged(System::Object^  sender, System::EventArgs^  e) {
-			 int test;
-			  // pruefen ob Wert eine Zahl ist
-			 if(!Int32::TryParse(txtColG->Text, test)) {
-				 // keine Zahl
-				 System::Windows::Forms::MessageBox::Show("Wert von 0-255!");
-				 txtColG->Text = "0";
+	// Color Tolerance slider
+	private: System::Void trbColTol_Scroll(System::Object^  sender, System::EventArgs^  e) {
+				 txtColTol->Text = System::Convert::ToString(trbColTol->Value);
 			 }
-			 else {
-				// pruefen ob > 255 oder <0
-				if(System::Convert::ToInt32(txtColG->Text)>255) {
-					System::Windows::Forms::MessageBox::Show("Zahl darf nicht groesser als 255 sein!");
-					txtColG->Text= "255";
-				} else if(System::Convert::ToInt32(txtColG->Text)<0) {
-					System::Windows::Forms::MessageBox::Show("Zahl darf nicht kleiner als 0 sein!");
-					txtColG->Text= "0";
-				}
-				else {
-					 // alle pruefen ob Werte drin stehen
-					 if((txtColR->Text != "") && (txtColG->Text != "") && (txtColB->Text != "")) {
-						Color col = Color::FromArgb(255,System::Convert::ToInt32(txtColR->Text),System::Convert::ToInt32(txtColG->Text),System::Convert::ToInt32(txtColB->Text));
-						pictureBoxCol->BackColor = col;
-						
+	private: System::Void ttHelp_Popup(System::Object^  sender, System::Windows::Forms::PopupEventArgs^  e) {
+			 }
+	// TextFeld fuer die Farbe R
+	private: System::Void txtColR_TextChanged(System::Object^  sender, System::EventArgs^  e) {
+				 int test;
+				 // pruefen ob Wert eine Zahl ist
+				 if(!Int32::TryParse(txtColR->Text, test)) {
+					 // keine Zahl
+					 System::Windows::Forms::MessageBox::Show("Zahlenwert von 0-255!");
+					 txtColR->Text = "0";
+				 }
+				 else {
+					 // pruefen ob > 255 oder <0
+					 if(System::Convert::ToInt32(txtColR->Text)>255) {
+						 System::Windows::Forms::MessageBox::Show("Zahl darf nicht groesser als 255 sein!");
+						 txtColR->Text= "255";
+					 } else if(System::Convert::ToInt32(txtColR->Text)<0) {
+						 System::Windows::Forms::MessageBox::Show("Zahl darf nicht kleiner als 0 sein!");
+						 txtColR->Text= "0";
 					 }
-				}
-			 }
-		 }
-private: System::Void txtColB_TextChanged(System::Object^  sender, System::EventArgs^  e) {
-			 int test;
-			 // pruefen ob Wert eine Zahl ist
-			 if(!Int32::TryParse(txtColB->Text, test)) {
-				 // keine Zahl
-				 System::Windows::Forms::MessageBox::Show("Wert von 0-255!");
-				 txtColB->Text = "0";
-			 }
-			 else {
-				// pruefen ob > 255 oder <0
-				if(System::Convert::ToInt32(txtColB->Text)>255) {
-					System::Windows::Forms::MessageBox::Show("Zahl darf nicht groesser als 255 sein!");
-					txtColB->Text= "255";
-				} else if(System::Convert::ToInt32(txtColB->Text)<0) {
-					System::Windows::Forms::MessageBox::Show("Zahl darf nicht kleiner als 0 sein!");
-					txtColB->Text= "0";
-				}
-				else {
-					 // alle pruefen ob Werte drin stehen
-					 if((txtColR->Text != "") && (txtColG->Text != "") && (txtColB->Text != "")) {
-						Color col = Color::FromArgb(255,System::Convert::ToInt32(txtColR->Text),System::Convert::ToInt32(txtColG->Text),System::Convert::ToInt32(txtColB->Text));
-						pictureBoxCol->BackColor = col;
-						
+					 else {
+						 // alle pruefen ob Werte drin stehen
+						 if((txtColR->Text != "") && (txtColG->Text != "") && (txtColB->Text != "")) { 
+							 Color col = Color::FromArgb(255,System::Convert::ToInt32(txtColR->Text),System::Convert::ToInt32(txtColG->Text),System::Convert::ToInt32(txtColB->Text));
+							 pictureBoxCol->BackColor = col;
+
+						 }
 					 }
-				}
+				 }
 			 }
-		 }
-private: System::Void btnKeying_Click(System::Object^  sender, System::EventArgs^  e) {
-			 // Keying starten
-			 // Farbwerte und Toleranz an Keying Klasse uebergeben
-			grpErgebnis->Enabled = "True";
-			btnKeying->Enabled = "False";
-			 ChromaKey keyer;
-			 if(discharge->getHeight() == background->getHeight() && discharge->getWidth() == background->getWidth()) {
-				final = keyer.keyImage(discharge,background,pictureBoxCol->BackColor.B, pictureBoxCol->BackColor.G, pictureBoxCol->BackColor.R, System::Convert::ToInt32(txtColTol->Text));
-				//System::Windows::Forms::MessageBox::Show(System::Convert::ToString(final->getHeight()));
-				if(htwSaveImage("F:\\temp.jpg",final->getImageContent(),final->getWidth(), final->getHeight(),final->getBytesPerPixel())) {
-					pictureBoxErgebnis->Image = Image::FromFile("F:\\temp.jpg");
-					//pictureBoxErgebnis->Image = Image::FromStream((System::IO::Stream)(final->getImageContent()));
-				}
-			 } else System::Windows::Forms::MessageBox::Show("Die beiden Bilder muessen gleich gross sein!");
-		 }
-private: System::Void btnSpeichern_Click(System::Object^  sender, System::EventArgs^  e) {
-			//System::IO::Stream^ myStream ;
-			//System::IO::Stream fs = saveFileErgebnis->OpenFile();
-			//fs->Close();
-			 if(saveFileErgebnis->FileName != "") {
-				 saveFileErgebnis->Filter = "JPeg Image|*.jpg";
+	// TextFeld fuer die Farbe G
+	private: System::Void txtColG_TextChanged(System::Object^  sender, System::EventArgs^  e) {
+				 int test;
+				 // pruefen ob Wert eine Zahl ist
+				 if(!Int32::TryParse(txtColG->Text, test)) {
+					 // keine Zahl
+					 System::Windows::Forms::MessageBox::Show("Wert von 0-255!");
+					 txtColG->Text = "0";
+				 }
+				 else {
+					 // pruefen ob > 255 oder <0
+					 if(System::Convert::ToInt32(txtColG->Text)>255) {
+						 System::Windows::Forms::MessageBox::Show("Zahl darf nicht groesser als 255 sein!");
+						 txtColG->Text= "255";
+					 } else if(System::Convert::ToInt32(txtColG->Text)<0) {
+						 System::Windows::Forms::MessageBox::Show("Zahl darf nicht kleiner als 0 sein!");
+						 txtColG->Text= "0";
+					 }
+					 else {
+						 // alle pruefen ob Werte drin stehen
+						 if((txtColR->Text != "") && (txtColG->Text != "") && (txtColB->Text != "")) {
+							 Color col = Color::FromArgb(255,System::Convert::ToInt32(txtColR->Text),System::Convert::ToInt32(txtColG->Text),System::Convert::ToInt32(txtColB->Text));
+							 pictureBoxCol->BackColor = col;
+
+						 }
+					 }
+				 }
+			 }
+	// TextFeld fuer die Farbe B
+	private: System::Void txtColB_TextChanged(System::Object^  sender, System::EventArgs^  e) {
+				 int test;
+				 // pruefen ob Wert eine Zahl ist
+				 if(!Int32::TryParse(txtColB->Text, test)) {
+					 // keine Zahl
+					 System::Windows::Forms::MessageBox::Show("Wert von 0-255!");
+					 txtColB->Text = "0";
+				 }
+				 else {
+					 // pruefen ob > 255 oder <0
+					 if(System::Convert::ToInt32(txtColB->Text)>255) {
+						 System::Windows::Forms::MessageBox::Show("Zahl darf nicht groesser als 255 sein!");
+						 txtColB->Text= "255";
+					 } else if(System::Convert::ToInt32(txtColB->Text)<0) {
+						 System::Windows::Forms::MessageBox::Show("Zahl darf nicht kleiner als 0 sein!");
+						 txtColB->Text= "0";
+					 }
+					 else {
+						 // alle pruefen ob Werte drin stehen
+						 if((txtColR->Text != "") && (txtColG->Text != "") && (txtColB->Text != "")) {
+							 Color col = Color::FromArgb(255,System::Convert::ToInt32(txtColR->Text),System::Convert::ToInt32(txtColG->Text),System::Convert::ToInt32(txtColB->Text));
+							 pictureBoxCol->BackColor = col;
+
+						 }
+					 }
+				 }
+			 }
+	// Keying Vorgang starten. Uebergibt Daten an Keying Klasse. Zeigt das Ergebnis in pictureBoxErgebnis
+	private: System::Void btnKeying_Click(System::Object^  sender, System::EventArgs^  e) {
+				 // Keying starten
+				 // Farbwerte und Toleranz an Keying Klasse uebergeben
+				 grpErgebnis->Enabled = "True";
+				 btnKeying->Enabled = "False";
+				 ChromaKey keyer;
+				 if(discharge->getHeight() == background->getHeight() && discharge->getWidth() == background->getWidth()) {
+					 final = keyer.keyImage(discharge,background,pictureBoxCol->BackColor.B, pictureBoxCol->BackColor.G, pictureBoxCol->BackColor.R, System::Convert::ToInt32(txtColTol->Text));
+					 //System::Windows::Forms::MessageBox::Show(System::Convert::ToString(final->getHeight()));
+					 if(htwSaveImage("C:\\temp.jpg",final->getImageContent(),final->getWidth(), final->getHeight(),final->getBytesPerPixel())) {
+						 pictureBoxErgebnis->Image = Image::FromFile("C:\\temp.jpg");
+						 //pictureBoxErgebnis->Image = Image::FromStream((System::IO::Stream)(final->getImageContent()));
+					 }
+				 } else System::Windows::Forms::MessageBox::Show("Die beiden Bilder muessen gleich gross sein!");
+			 }
+	// speichert das Ergebnisbild auf der Festplatte mit saveFileDialog
+	private: System::Void btnSpeichern_Click(System::Object^  sender, System::EventArgs^  e) {
+				 //System::IO::Stream^ myStream ;
+				 //System::IO::Stream fs = saveFileErgebnis->OpenFile();
+				 //fs->Close();
+
+				 saveFileErgebnis->Filter = "Jpeg Image|*.jpg";
+				 saveFileErgebnis->Title = "Bild speichern";
 				 saveFileErgebnis->ShowDialog();
-				 System::IO::FileStream ^ fs = safe_cast<System::IO::FileStream^>(saveFileErgebnis->OpenFile());
-				 pictureBoxErgebnis->Image->Save(fs, System::Drawing::Imaging::ImageFormat::Jpeg);
-				 fs->Close();
-			 }
-			 if(System::IO::File::Exists("F:\\temp.jpg")) {
-				  System::IO::File::Delete("F:\\temp.jpg");
-			}
-		 }
-			private: System::Void Form1_Load(System::Object^  sender, System::EventArgs^  e) {
-		 }
 
-};
+				 if(saveFileErgebnis->FileName != "") {
+					 System::IO::FileStream ^ fs = safe_cast<System::IO::FileStream^>(saveFileErgebnis->OpenFile());
+					 pictureBoxErgebnis->Image->Save(fs, System::Drawing::Imaging::ImageFormat::Jpeg);
+					 fs->Close();
+				 }
+			 }
+	private: System::Void Form1_Load(System::Object^  sender, System::EventArgs^  e) {
+			 }
+	// aufraeumen: Image aus pictureBox entfernen, zwischengespeichertes TempBild loeschen
+	private: System::Void Form1_FormClosed(System::Object^  sender, System::Windows::Forms::FormClosedEventArgs^  e) {
+				 delete pictureBoxErgebnis->Image;
+				 delete pictureBoxBild1->Image;
+				 delete pictureBoxBild2->Image;
+
+				 if(System::IO::File::Exists("C:\\temp.jpg")) {
+					 System::IO::File::Delete("C:\\temp.jpg");
+				 }
+			 }
+	};
 }
 
