@@ -1,10 +1,15 @@
 #pragma once
-#include "filter.h"
 #include "ImageObject.h"
+
+///////////////////////////////////////////////////////////////////////////////
+/// This class allows to delete an specific color from an given image and adds to another image.
+///////////////////////////////////////////////////////////////////////////////
+
 
 class ChromaKey :
 	public Filter
 {
+
 public:
 	ChromaKey(void);
 	~ChromaKey(void);
@@ -18,6 +23,5 @@ private:
 	int keyColor;
 	ImageObject* dischargedImage;
 	ImageObject* backgroundImage;
-
 };
 

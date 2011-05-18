@@ -31,7 +31,6 @@ ImageObject* ChromaKey::keyImage(ImageObject* dischargedImage, ImageObject* back
 	int* keyColor = new int[3];
 	int* minKeyColor = new int[3];
 	int* maxKeyColor = new int[3];
-	//int* blackColor = new int[3];
 
 	if(!tolerance){
 		keyColor[0]=b;
@@ -50,11 +49,12 @@ ImageObject* ChromaKey::keyImage(ImageObject* dischargedImage, ImageObject* back
 		if(maxKeyColor[2] > 255) maxKeyColor[2] = 255;
 	}
 
-	//blackColor[0]=0;
-	//blackColor[1]=0;
-	//blackColor[2]=0;
-
 	//handle different image-sizes
+
+	if(){
+
+	}
+
 	for(int i=0; i < dischargedImage->getWidth()*dischargedImage->getHeight()*dischargedImage->getBytesPerPixel(); i+=dischargedImage->getBytesPerPixel())
 	{
 		//System::Windows::Forms::MessageBox::Show("i: ",System::Convert::ToString(i));// << "Wert von pixel :" << i << endl;
@@ -83,7 +83,6 @@ ImageObject* ChromaKey::keyImage(ImageObject* dischargedImage, ImageObject* back
 		delete minKeyColor;
 		delete maxKeyColor;
 	}
-	//delete blackColor;
 
 	return backgroundImage;
 }
