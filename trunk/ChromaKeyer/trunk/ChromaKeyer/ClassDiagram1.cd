@@ -1,1 +1,32 @@
- 
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="ChromaKey">
+    <Position X="0.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAAAAAAEAAAAAAAAAACQAABAQgAAAAAAAIAAAEAAA=</HashCode>
+      <FileName>ChromaKey.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HTWStringConverter">
+    <Position X="3" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAACAAAAAAAAAAAAIAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>HTWStringConverter.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ImageLoader">
+    <Position X="5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ImageLoader.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ImageObject">
+    <Position X="7.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAAAAAAAEAABAAQAQAAAAAQAABAAQgBAAAABACBAAAA=</HashCode>
+      <FileName>ImageObject.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Tahoma" Size="8.25" />
+</ClassDiagram>
