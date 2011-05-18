@@ -38,9 +38,6 @@
     <ClCompile Include="ChromaKey.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Filter.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="ImageObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

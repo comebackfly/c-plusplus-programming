@@ -2,6 +2,7 @@
 #include "ImageObject.h"
 #include "graphlibHTW.h"
 
+//constructors
 ImageObject::ImageObject(void)
 {
 }
@@ -14,27 +15,25 @@ ImageObject::ImageObject(unsigned char* pix, int width, int height, int bpp)
 	this->bpp=bpp;
 }
 
-
+//destructor
 ImageObject::~ImageObject(void)
 {
 	htwDeleteImage(this->imageContent); 
 }
 
 
-
+//returns a whole pixel with given index
 int* ImageObject::getPixelValue(int index){
 	int *pixel = new int[3];
-	//System::Windows::Forms::MessageBox::Show(System::Convert::ToString(this->imageContent[i]));
 	//unsigned char* test = imageContent;
 	for(int i=0; i<3; i++){
-		//System::Windows::Forms::MessageBox::Show(System::Convert::ToString(this->imageContent[index+i]));
 		pixel[i] = this->imageContent[index+i];
-		//System::Windows::Forms::MessageBox::Show(System::Convert::ToString(pixel[i]));
 	}
 
 	return pixel;
 }
 
+//returns the sum from to pixels
 int* ImageObject::addPixelValues(int* pixelOne, int* pixelTwo ){
 	int *sumPixel = new int[3];
 
@@ -45,20 +44,22 @@ int* ImageObject::addPixelValues(int* pixelOne, int* pixelTwo ){
 	return sumPixel;
 }
 
+//get image width
 int ImageObject::getWidth(){
 	return this->width;
 }
 
-
+//get image height
 int ImageObject::getHeight(){
 	return this->height;
 }
 
+//get bytes per pixel (bpp) 
 int ImageObject::getBytesPerPixel(){
 	return this->bpp;
 }
 
-
+//sets an specific pixel (b, g, r)
 void ImageObject::setPixelValue(int index, int* values){
 
 	for(int i=0; i<sizeof(values); i++){
@@ -66,6 +67,7 @@ void ImageObject::setPixelValue(int index, int* values){
 	}
 }
 
+//returns pointer on image as byte array
 unsigned char* ImageObject::getImageContent(){
 	return this->imageContent;
 }
