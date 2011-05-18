@@ -49,30 +49,71 @@ ImageObject* ChromaKey::keyImage(ImageObject* dischargedImage, ImageObject* back
 		if(maxKeyColor[2] > 255) maxKeyColor[2] = 255;
 	}
 
-	//handle different image-sizes
+	//handle if discharged image is smaller than background image
+	//if(dischargedImage->getWidth()<backgroundImage->getWidth()&&dischargedImage->getHeight()<backgroundImage->getHeight()){
 
-	//if(){
+	//	//pixel=dischargedImage->getPixelValue(i);
+	//	for(int i=0; i < backgroundImage->getWidth()*backgroundImage->getHeight()*backgroundImage->getBytesPerPixel(); i+=backgroundImage->getBytesPerPixel())
+	//	{
+	//		
+	//		if(i<dischargedImage->getWidth()*dischargedImage->getHeight()*dischargedImage->getBytesPerPixel()){
+	//			pixel=dischargedImage->getPixelValue(i);
+	//			if(!tolerance){
+	//				if(pixel[0]==keyColor[0] && pixel[1]==keyColor[1] && pixel[2]==keyColor[2]){
+	//					backgroundImage->setPixelValue(i, dischargedImage->getPixelValue(i));
+	//					} else { 
+	//					backgroundImage->setPixelValue(i, dischargedImage->getPixelValue(i));
+	//				}else{
+	//					if(((pixel[0]==keyColor[0]) || (pixel[0]>=minKeyColor[0] && pixel[0]<=maxKeyColor[0])) && (pixel[1]==keyColor[1] || (pixel[1]>=minKeyColor[1] && pixel[1]<=maxKeyColor[1])) && (pixel[2]==keyColor[2] || (pixel[2]>=minKeyColor[2] && pixel[2]<=maxKeyColor[2]))){
+	//					backgroundImage->setPixelValue(i, backgroundImage->getPixelValue(i));
+	//				} else {
+	//					backgroundImage->setPixelValue(i, dischargedImage->getPixelValue(i));
+	//				}
 
-	//}
+	//		}else{
+	//			backgroundImage->setPixelValue(i, backgroundImage->getPixelValue(i));
+	//		}
 
-	for(int i=0; i < dischargedImage->getWidth()*dischargedImage->getHeight()*dischargedImage->getBytesPerPixel(); i+=dischargedImage->getBytesPerPixel())
-	{
-		//System::Windows::Forms::MessageBox::Show("i: ",System::Convert::ToString(i));// << "Wert von pixel :" << i << endl;
-		pixel=dischargedImage->getPixelValue(i);
-		if(!tolerance){
-			if(pixel[0]==keyColor[0] && pixel[1]==keyColor[1] && pixel[2]==keyColor[2]){
+	//		if(!tolerance){
+	//				if(pixel[0]==keyColor[0] && pixel[1]==keyColor[1] && pixel[2]==keyColor[2]){
+	//					backgroundImage->setPixelValue(i, backgroundImage->getPixelValue(i));
+	//				} else { 
+	//					backgroundImage->setPixelValue(i, dischargedImage->getPixelValue(i));
+	//				}
+	//			}else{
+	//				if(((pixel[0]==keyColor[0]) || (pixel[0]>=minKeyColor[0] && pixel[0]<=maxKeyColor[0])) && (pixel[1]==keyColor[1] || (pixel[1]>=minKeyColor[1] && pixel[1]<=maxKeyColor[1])) && (pixel[2]==keyColor[2] || (pixel[2]>=minKeyColor[2] && pixel[2]<=maxKeyColor[2]))){
+	//					backgroundImage->setPixelValue(i, backgroundImage->getPixelValue(i));
+	//				} else {
+	//					backgroundImage->setPixelValue(i, dischargedImage->getPixelValue(i));
+	//				}
+	//			}
+
+
+	//}else{
+		//images have the same dimensions
+		for(int i=0; i < dischargedImage->getWidth()*dischargedImage->getHeight()*dischargedImage->getBytesPerPixel(); i+=dischargedImage->getBytesPerPixel())
+		{
+			//System::Windows::Forms::MessageBox::Show("i: ",System::Convert::ToString(i));// << "Wert von pixel :" << i << endl;
+			if(i<dischargedImage->getWidth()*dischargedImage->getHeight()*dischargedImage->getBytesPerPixel()){
+				pixel=dischargedImage->getPixelValue(i);
+
+				if(!tolerance){
+					if(pixel[0]==keyColor[0] && pixel[1]==keyColor[1] && pixel[2]==keyColor[2]){
+						backgroundImage->setPixelValue(i, backgroundImage->getPixelValue(i));
+					} else { 
+						backgroundImage->setPixelValue(i, dischargedImage->getPixelValue(i));
+					}
+				}else{
+					if(((pixel[0]==keyColor[0]) || (pixel[0]>=minKeyColor[0] && pixel[0]<=maxKeyColor[0])) && (pixel[1]==keyColor[1] || (pixel[1]>=minKeyColor[1] && pixel[1]<=maxKeyColor[1])) && (pixel[2]==keyColor[2] || (pixel[2]>=minKeyColor[2] && pixel[2]<=maxKeyColor[2]))){
+						backgroundImage->setPixelValue(i, backgroundImage->getPixelValue(i));
+					} else {
+						backgroundImage->setPixelValue(i, dischargedImage->getPixelValue(i));
+					}
+				}
+			}else{
 				backgroundImage->setPixelValue(i, backgroundImage->getPixelValue(i));
-			} else { 
-				backgroundImage->setPixelValue(i, dischargedImage->getPixelValue(i));
 			}
-		}else{
-			if(((pixel[0]==keyColor[0]) || (pixel[0]>=minKeyColor[0] && pixel[0]<=maxKeyColor[0])) && (pixel[1]==keyColor[1] || (pixel[1]>=minKeyColor[1] && pixel[1]<=maxKeyColor[1])) && (pixel[2]==keyColor[2] || (pixel[2]>=minKeyColor[2] && pixel[2]<=maxKeyColor[2]))){
-				backgroundImage->setPixelValue(i, backgroundImage->getPixelValue(i));
-			} else {
-				backgroundImage->setPixelValue(i, dischargedImage->getPixelValue(i));
-			}
-		}
-		
+		//}
 	}
 
 	//clean memory
