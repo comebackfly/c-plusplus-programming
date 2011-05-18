@@ -139,7 +139,11 @@ Es gibt 3 Moeglichkeiten die Farbe zu bestimmen.
 
 Ausserdem koennen Sie noch die Farbtoleranz bestimmt:
 1. Indem Sie den Slider benutzen
-2. Indem Sie den Prozentwert manuel in das Textfeld eintragen</value>
+2. Indem Sie den Prozentwert manuel in das Textfeld eintragen
+
+Die Farbtoleranz ist im Bereich von 0% bis 30%. 0% Toleranz ist der default Wert
+und bedeutet, dass nur genau der ausgewaehlte Farbwert beachtet wird,
+ohne aehnliche Farben zu beruecksichtigt.</value>
   </data>
   <metadata name="colDialog.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>224, 19</value>
