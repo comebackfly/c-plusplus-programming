@@ -808,9 +808,9 @@ namespace ChromaKeyer {
 				 delete pictureBoxErgebnis->Image;
 				 delete pictureBoxBild1->Image;
 				 delete pictureBoxBild2->Image;
-				 delete final;
-				 delete discharge;
-				 delete background;
+				// delete final;
+				// delete discharge;
+				// delete background;
 
 				 if(System::IO::File::Exists("C:\\Windows\\Temp\\temp.jpg")) {
 					 System::IO::File::Delete("C:\\Windows\\Temp\\temp.jpg");
