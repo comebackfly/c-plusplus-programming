@@ -19,7 +19,7 @@ ImageObject::ImageObject(unsigned char* pix, int width, int height, int bpp)
 ImageObject::~ImageObject(void)
 {
 	htwDeleteImage(this->imageContent); 
-}
+} 
 
 
 //returns a whole pixel with given index

@@ -16,7 +16,7 @@ public:
 	static void unloadImage();
 
 //private:
-	static unsigned char *imageContent;
-	static ImageObject* image;
+	//static unsigned char *imageContent;
+	//static ImageObject* image;
 };
 
