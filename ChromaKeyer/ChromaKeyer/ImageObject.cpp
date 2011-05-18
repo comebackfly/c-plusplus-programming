@@ -1,6 +1,6 @@
 #include "StdAfx.h"
 #include "ImageObject.h"
-
+#include "graphlibHTW.h"
 
 ImageObject::ImageObject(void)
 {
@@ -17,6 +17,7 @@ ImageObject::ImageObject(unsigned char* pix, int width, int height, int bpp)
 
 ImageObject::~ImageObject(void)
 {
+	htwDeleteImage(this->imageContent); 
 }
 
 
@@ -45,13 +46,11 @@ int* ImageObject::addPixelValues(int* pixelOne, int* pixelTwo ){
 }
 
 int ImageObject::getWidth(){
-
 	return this->width;
 }
 
 
 int ImageObject::getHeight(){
-
 	return this->height;
 }
 
