@@ -91,7 +91,6 @@
     <ClCompile Include="AssemblyInfo.cpp" />
     <ClCompile Include="ChromaKey.cpp" />
     <ClCompile Include="ChromaKeyer.cpp" />
-    <ClCompile Include="Filter.cpp" />
     <ClCompile Include="ImageLoader.cpp" />
     <ClCompile Include="ImageObject.cpp" />
     <ClCompile Include="stdafx.cpp">

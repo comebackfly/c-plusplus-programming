@@ -2,7 +2,7 @@
 #include "ImageObject.h"
 
 ///////////////////////////////////////////////////////////////////////////////
-/// This class allows to delete an specific color from an given image and adds to another image.
+/// This class allows to delete an pixel with specific color from an given image and adds the pixel to another image.
 ///////////////////////////////////////////////////////////////////////////////
 
 

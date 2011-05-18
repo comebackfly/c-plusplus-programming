@@ -4,6 +4,7 @@
 #include <iostream>
 #include "HTWStringConverter.h"
 
+//constructors
 ChromaKey::ChromaKey(void)
 {
 }
@@ -13,18 +14,22 @@ ChromaKey::~ChromaKey(void)
 {
 }
 
+//set key color
 void ChromaKey::setKeyColor(int color){
 	keyColor=color;
 }
 
+//sets the image which should be cleaned from a specific color
 void ChromaKey::setDischargedImage(ImageObject dischargedImage){
 	dischargedImage = dischargedImage;
 }
 
+//sets the base image where discharged image should be integrated
 void ChromaKey::setBackgroundImage(ImageObject backgroundImage){
 	backgroundImage = backgroundImage;
 }
 
+//keys and adds the two images to another
 ImageObject* ChromaKey::keyImage(ImageObject* dischargedImage, ImageObject* backgroundImage, int b, int g, int r, int tolerance){
 	//keying
 	int* pixel = new int[3];
@@ -32,6 +37,7 @@ ImageObject* ChromaKey::keyImage(ImageObject* dischargedImage, ImageObject* back
 	int* minKeyColor = new int[3];
 	int* maxKeyColor = new int[3];
 
+	//calculate color tolerance
 	if(!tolerance){
 		keyColor[0]=b;
 		keyColor[1]=g;
