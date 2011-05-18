@@ -97,7 +97,9 @@ ImageObject* ChromaKey::keyImage(ImageObject* dischargedImage, ImageObject* back
 
 	//}else{
 		//images have the same dimensions
-		for(int i=0; i < dischargedImage->getWidth()*dischargedImage->getHeight()*dischargedImage->getBytesPerPixel(); i+=dischargedImage->getBytesPerPixel())
+		//for(int i=0; i < dischargedImage->getWidth()*dischargedImage->getHeight()*dischargedImage->getBytesPerPixel(); i+=dischargedImage->getBytesPerPixel())
+		
+		for(int i=0; i < backgroundImage->getWidth()*backgroundImage->getHeight()*backgroundImage->getBytesPerPixel(); i+=backgroundImage->getBytesPerPixel())
 		{
 			//System::Windows::Forms::MessageBox::Show("i: ",System::Convert::ToString(i));// << "Wert von pixel :" << i << endl;
 			if(i<dischargedImage->getWidth()*dischargedImage->getHeight()*dischargedImage->getBytesPerPixel()){
