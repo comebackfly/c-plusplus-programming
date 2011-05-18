@@ -51,9 +51,9 @@ ImageObject* ChromaKey::keyImage(ImageObject* dischargedImage, ImageObject* back
 
 	//handle different image-sizes
 
-	if(){
+	//if(){
 
-	}
+	//}
 
 	for(int i=0; i < dischargedImage->getWidth()*dischargedImage->getHeight()*dischargedImage->getBytesPerPixel(); i+=dischargedImage->getBytesPerPixel())
 	{

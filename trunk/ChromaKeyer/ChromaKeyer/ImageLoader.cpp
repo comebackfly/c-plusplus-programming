@@ -1,28 +1,28 @@
 #include "StdAfx.h"
 #include "ImageLoader.h"
 #include "ImageObject.h"
-
+#include "graphlibHTW.h"
 
 
 ImageObject* ImageLoader::loadImage(int w, int h, int bpp, std::string fileName){
 	const char* fileNameC = fileName.c_str();
-	unsigned char *pix = (unsigned char *)htwOpenImage( fileNameC, &w, &h, &bpp );
-	//System::Windows::Forms::MessageBox::Show(System::Convert::ToString(pix));
+	imageContent = (unsigned char *)htwOpenImage( fileNameC, &w, &h, &bpp );
+		//unsigned char *imageContent = (unsigned char *)htwOpenImage( fileNameC, &w, &h, &bpp );
 
-	ImageObject* image;
+	//ImageObject* image;
   
-	if( !pix ){
-		 // Bild konnte nicht geladen werden
+	if( !imageContent ){
+		System::Windows::Forms::MessageBox::Show("Bild konnte nicht geladen werden!");
 	}else if( bpp==1 ){
 		 // Graustufenbild in eigene Struktur kopieren
 	}else if( bpp==3 ){
 		 // Farbbild in eigene Struktur kopieren
-//		cout << "in :"  << endl;
-		image = new ImageObject(pix, w, h, bpp);
+		image = new ImageObject(imageContent, w, h, bpp);
 	}
-
-	  //Destruktor
-	//htwDeleteImage( pix ); 
-
 	return image;
+}
+
+void ImageLoader::unloadImage(){
+	htwDeleteImage(imageContent);
+	delete image;
 }
