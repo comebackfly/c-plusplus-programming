@@ -6,10 +6,10 @@
 //loads an image with given dimensions from file
 ImageObject* ImageLoader::loadImage(int w, int h, int bpp, std::string fileName){
 	const char* fileNameC = fileName.c_str();
-	imageContent = (unsigned char *)htwOpenImage( fileNameC, &w, &h, &bpp );
-		//unsigned char *imageContent = (unsigned char *)htwOpenImage( fileNameC, &w, &h, &bpp );
+	//imageContent = (unsigned char *)htwOpenImage( fileNameC, &w, &h, &bpp );
+		unsigned char *imageContent = (unsigned char *)htwOpenImage( fileNameC, &w, &h, &bpp );
 
-	//ImageObject* image;
+	ImageObject* image;
   
 	if( !imageContent ){
 		System::Windows::Forms::MessageBox::Show("Bild konnte nicht geladen werden!");
@@ -24,6 +24,6 @@ ImageObject* ImageLoader::loadImage(int w, int h, int bpp, std::string fileName)
 
 //destructor
 void ImageLoader::unloadImage(){
-	htwDeleteImage(imageContent);
-	delete image;
+	//htwDeleteImage(imageContent);
+	//delete image;
 }

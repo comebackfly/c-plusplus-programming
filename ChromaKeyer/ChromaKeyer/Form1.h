@@ -587,7 +587,6 @@ namespace ChromaKeyer {
 					 grpBild2->Enabled = "True";
 					 grpColorCtrl->Enabled = "True";
 				 }
-
 			 }
 	// Oeffnet FileDialog fuer Bild 2 (Hintergrund) Upload
 	private: System::Void btnOpenFile2_Click(System::Object^  sender, System::EventArgs^  e) {
@@ -774,8 +773,12 @@ namespace ChromaKeyer {
 	private: System::Void btnKeying_Click(System::Object^  sender, System::EventArgs^  e) {
 				 // Keying starten
 				 // Farbwerte und Toleranz an Keying Klasse uebergeben
+				 delete pictureBoxErgebnis->Image;
+				 if(System::IO::File::Exists("C:\\Windows\\Temp\\temp.jpg")) {
+					 System::IO::File::Delete("C:\\Windows\\Temp\\temp.jpg");
+				 }
 				 grpErgebnis->Enabled = "True";
-				 btnKeying->Enabled = "False";
+				 //btnKeying->Enabled = "False";
 				 tbxTest->Text = "bitte warten...";
 				 ChromaKey keyer;
 				 if(discharge->getHeight() <= background->getHeight() && discharge->getWidth() <= background->getWidth()) {
@@ -805,6 +808,9 @@ namespace ChromaKeyer {
 				 delete pictureBoxErgebnis->Image;
 				 delete pictureBoxBild1->Image;
 				 delete pictureBoxBild2->Image;
+				 delete final;
+				 delete discharge;
+				 delete background;
 
 				 if(System::IO::File::Exists("C:\\Windows\\Temp\\temp.jpg")) {
 					 System::IO::File::Delete("C:\\Windows\\Temp\\temp.jpg");
