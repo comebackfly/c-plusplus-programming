@@ -56,24 +56,20 @@ ImageObject* ChromaKey::keyImage(ImageObject* dischargedImage, ImageObject* back
 	}
 
 		for(int i=0; i < backgroundImage->getWidth()*backgroundImage->getHeight()*backgroundImage->getBytesPerPixel(); i+=backgroundImage->getBytesPerPixel())
-		{
-			if(i<dischargedImage->getWidth()*dischargedImage->getHeight()*dischargedImage->getBytesPerPixel()){
+		{	// Vordergrund kleiner als Hintergrund
+			if(i<=dischargedImage->getWidth()*dischargedImage->getHeight()*dischargedImage->getBytesPerPixel()) {
 				pixel=dischargedImage->getPixelValue(i);
 
-				if(!tolerance){
-					if(pixel[0]==keyColor[0] && pixel[1]==keyColor[1] && pixel[2]==keyColor[2]){
-						backgroundImage->setPixelValue(i, backgroundImage->getPixelValue(i));
-					} else { 
-						backgroundImage->setPixelValue(i, pixel);
-					}
-				}else{
-					if(((pixel[0]==keyColor[0]) || (pixel[0]>=minKeyColor[0] && pixel[0]<=maxKeyColor[0])) && (pixel[1]==keyColor[1] || (pixel[1]>=minKeyColor[1] && pixel[1]<=maxKeyColor[1])) && (pixel[2]==keyColor[2] || (pixel[2]>=minKeyColor[2] && pixel[2]<=maxKeyColor[2]))){
-						backgroundImage->setPixelValue(i, backgroundImage->getPixelValue(i));
-					} else {
-						backgroundImage->setPixelValue(i, pixel);
-					}
+				// Hinweis: Die if Abfrage if(!tolerance) hab ich weggelassen weil der Fall sowieso im else abgedeckt wurde.
+				// ... das keying bei unterschiedlich grossen Bildern funktioniert trotzdem nicht :( Christian
+				
+				if(((pixel[0]==keyColor[0]) || (pixel[0]>=minKeyColor[0] && pixel[0]<=maxKeyColor[0])) && (pixel[1]==keyColor[1] || (pixel[1]>=minKeyColor[1] && pixel[1]<=maxKeyColor[1])) && (pixel[2]==keyColor[2] || (pixel[2]>=minKeyColor[2] && pixel[2]<=maxKeyColor[2]))){
+					backgroundImage->setPixelValue(i, backgroundImage->getPixelValue(i));
+				} else {
+					backgroundImage->setPixelValue(i, pixel);
 				}
 			}else{
+				//System::Windows::Forms::MessageBox::Show("i: ",System::Convert::ToString(i));
 				backgroundImage->setPixelValue(i, backgroundImage->getPixelValue(i));
 			}
 		//}
