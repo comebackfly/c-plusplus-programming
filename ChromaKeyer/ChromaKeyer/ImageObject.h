@@ -15,6 +15,7 @@ public:
 	unsigned char* getImageContent();
 	void setPixelValue(int index, int* values);
 	int* addPixelValues(int* pixelOne, int* pixelTwo );
+	void ImageObject::deletePixelValue(int index);
 
 private:
 	unsigned char *imageContent;
