@@ -86,17 +86,24 @@
     <None Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\ChromaKeyer\ChromaKeyer\ImageLoader.cpp" />
+    <ClCompile Include="..\..\ChromaKeyer\ChromaKeyer\ImageObject.cpp" />
     <ClCompile Include="AssemblyInfo.cpp" />
     <ClCompile Include="PaintingThreads.cpp" />
+    <ClCompile Include="PaintThread.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\ChromaKeyer\ChromaKeyer\graphlibHTW.h" />
+    <ClInclude Include="..\..\ChromaKeyer\ChromaKeyer\ImageLoader.h" />
+    <ClInclude Include="..\..\ChromaKeyer\ChromaKeyer\ImageObject.h" />
     <ClInclude Include="Form1.h">
       <FileType>CppForm</FileType>
     </ClInclude>
+    <ClInclude Include="PaintThread.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
