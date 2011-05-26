@@ -67,6 +67,12 @@ void ImageObject::setPixelValue(int index, int* values){
 	}
 }
 
+
+void ImageObject::deletePixelValue(int index){
+	//this->imageContent.erase;
+
+}
+
 //returns pointer on image as byte array
 unsigned char* ImageObject::getImageContent(){
 	return this->imageContent;
