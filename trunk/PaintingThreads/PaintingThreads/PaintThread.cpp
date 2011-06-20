@@ -2,6 +2,7 @@
 #include "PaintThread.h"
 #include "ImageObject.h"
 
+
 PaintThread::PaintThread(void)
 {
 
@@ -25,6 +26,14 @@ void PaintThread::drawRectangle(int x0, int y0, int x1, int y1, int r, int g, in
 	}
 }
 	
-void PaintThread::drawing(int loops){
+ void PaintThread::drawing(int loops){
 
+	for ( int i = 0; i < loops; i++ )
+      {
+         Console::Write(  "painting. loop: "+i );
+
+         // Yield the rest of the time slice.
+         Thread::Sleep( 0 );
+
+      }
 }
