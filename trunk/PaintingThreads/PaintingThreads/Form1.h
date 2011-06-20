@@ -46,6 +46,9 @@ namespace PaintingThreads {
 	private: System::Windows::Forms::TrackBar^  trbLoops;
 	private: System::Windows::Forms::Button^  btnLoadImage;
 	private: System::Windows::Forms::PictureBox^  pictureBox;
+	private: System::Windows::Forms::Button^  btnPause;
+	private: System::Windows::Forms::OpenFileDialog^  openFile;
+			 int loadImageOk = 0;
 
 
 	private:
@@ -72,6 +75,7 @@ namespace PaintingThreads {
 			this->trbLoops = (gcnew System::Windows::Forms::TrackBar());
 			this->btnLoadImage = (gcnew System::Windows::Forms::Button());
 			this->pictureBox = (gcnew System::Windows::Forms::PictureBox());
+			this->btnPause = (gcnew System::Windows::Forms::Button());
 			this->grpCtrl->SuspendLayout();
 			this->grpPaintOptions->SuspendLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->trbThreads))->BeginInit();
@@ -86,7 +90,7 @@ namespace PaintingThreads {
 			this->grpCtrl->Controls->Add(this->btnLoadImage);
 			this->grpCtrl->Location = System::Drawing::Point(13, 13);
 			this->grpCtrl->Name = L"grpCtrl";
-			this->grpCtrl->Size = System::Drawing::Size(144, 264);
+			this->grpCtrl->Size = System::Drawing::Size(144, 265);
 			this->grpCtrl->TabIndex = 0;
 			this->grpCtrl->TabStop = false;
 			this->grpCtrl->Text = L"control";
@@ -99,6 +103,7 @@ namespace PaintingThreads {
 			this->btnStartPainting->TabIndex = 8;
 			this->btnStartPainting->Text = L"start painting";
 			this->btnStartPainting->UseVisualStyleBackColor = true;
+			this->btnStartPainting->Click += gcnew System::EventHandler(this, &Form1::btnStartPainting_Click);
 			// 
 			// grpPaintOptions
 			// 
@@ -123,6 +128,7 @@ namespace PaintingThreads {
 			this->trbThreads->Size = System::Drawing::Size(75, 45);
 			this->trbThreads->TabIndex = 1;
 			this->trbThreads->Value = 1;
+			this->trbThreads->Scroll += gcnew System::EventHandler(this, &Form1::trbThreads_Scroll);
 			// 
 			// txtLoops
 			// 
@@ -169,6 +175,7 @@ namespace PaintingThreads {
 			this->trbLoops->Size = System::Drawing::Size(75, 45);
 			this->trbLoops->TabIndex = 2;
 			this->trbLoops->Value = 1;
+			this->trbLoops->Scroll += gcnew System::EventHandler(this, &Form1::trbLoops_Scroll);
 			// 
 			// btnLoadImage
 			// 
@@ -184,15 +191,25 @@ namespace PaintingThreads {
 			// 
 			this->pictureBox->Location = System::Drawing::Point(167, 12);
 			this->pictureBox->Name = L"pictureBox";
-			this->pictureBox->Size = System::Drawing::Size(621, 466);
+			this->pictureBox->Size = System::Drawing::Size(640, 480);
 			this->pictureBox->TabIndex = 1;
 			this->pictureBox->TabStop = false;
+			// 
+			// btnPause
+			// 
+			this->btnPause->Location = System::Drawing::Point(64, 284);
+			this->btnPause->Name = L"btnPause";
+			this->btnPause->Size = System::Drawing::Size(45, 23);
+			this->btnPause->TabIndex = 9;
+			this->btnPause->Text = L"pause";
+			this->btnPause->UseVisualStyleBackColor = true;
 			// 
 			// Form1
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->ClientSize = System::Drawing::Size(800, 490);
+			this->ClientSize = System::Drawing::Size(818, 503);
+			this->Controls->Add(this->btnPause);
 			this->Controls->Add(this->pictureBox);
 			this->Controls->Add(this->grpCtrl);
 			this->Name = L"Form1";
@@ -209,15 +226,87 @@ namespace PaintingThreads {
 		}
 #pragma endregion
 	private: System::Void Form1_Load(System::Object^  sender, System::EventArgs^  e) {
-			 }
+	}
+	// load image button
+	private: System::Void btnLoadImage_Click(System::Object^  sender, System::EventArgs^  e) {
+		// file dialog zum laden des bildes
+		if(openFile->ShowDialog() == System::Windows::Forms::DialogResult::OK)
+		{
+			System::IO::StreamReader ^ sr = gcnew
+			System::IO::StreamReader(openFile->FileName);
+			sr->Close();
+			pictureBox->Enabled = "True";
+			// load image into picture box
+			pictureBox->Image = Image::FromFile(openFile->FileName);
+			//discharge = ImageLoader::loadImage(Image::FromFile(openFile->FileName)->Width,Image::FromFile(openFile1->FileName)->Height,3,HTWStringConverter::Sys2Std(openFile1->FileName));
+			loadImageOk = 1;
+		}
+	}
+
+	// text slider threads
+	private: System::Void txtThreads_TextChanged(System::Object^  sender, System::EventArgs^  e) {
+		int threadSlider;
+		// pruefen ob Wert eine Zahl ist
+		if(!Int32::TryParse(txtThreads->Text, threadSlider)) {
+			// keine Zahl
+			System::Windows::Forms::MessageBox::Show("Wert zwischen 1 und 10");
+			//default wert
+			txtThreads->Text = "1";
+		}
+		else {
+			// pruefen ob > 10 oder <0
+			if(System::Convert::ToInt32(txtThreads->Text)>=10) {
+				System::Windows::Forms::MessageBox::Show("Wert zwischen 1 und 10");
+				txtThreads->Text= "10";
+			} else if(System::Convert::ToInt32(txtThreads->Text)<0) {
+				System::Windows::Forms::MessageBox::Show("Wert zwischen 1 und 10");
+				txtThreads->Text= "1";
+			} else {
+				trbThreads->Value = System::Convert::ToInt32(txtThreads->Text);
+			}
+		}
+	}
+	// slider threads
+	private: System::Void trbThreads_Scroll(System::Object^  sender, System::EventArgs^  e) {
+		txtThreads->Text = System::Convert::ToString(trbThreads->Value);
+	}	
+	// slider loops
+	private: System::Void trbLoops_Scroll(System::Object^  sender, System::EventArgs^  e) {
+			txtLoops->Text = System::Convert::ToString(trbLoops->Value);
+	}
+	// text slider loops
 	private: System::Void txtLoops_TextChanged(System::Object^  sender, System::EventArgs^  e) {
+		int loopsSlider;
+		// pruefen ob Wert eine Zahl ist
+		if(!Int32::TryParse(txtLoops->Text, loopsSlider)) {
+			// keine Zahl
+			System::Windows::Forms::MessageBox::Show("Wert zwischen 1 und 5000");
+			//default wert
+			txtThreads->Text = "100";
+		}
+		else {
+			// pruefen ob > 5000 oder <0
+			if(System::Convert::ToInt32(txtLoops->Text)>=5000) {
+				System::Windows::Forms::MessageBox::Show("Wert zwischen 1 und 5000");
+				txtLoops->Text= "5000";
+			} else if(System::Convert::ToInt32(txtLoops->Text)<0) {
+				System::Windows::Forms::MessageBox::Show("Wert zwischen 1 und 5000");
+				txtLoops->Text= "1";
+			} else {
+				trbLoops->Value = System::Convert::ToInt32(txtLoops->Text);
+			}
+		}
+	}
+	// button startPainting
+	private: System::Void btnStartPainting_Click(System::Object^  sender, System::EventArgs^  e) {
+			 if(!loadImageOk) {
+				System::Windows::Forms::MessageBox::Show("Bitte zuerst ein Bild laden");
+			 } else {
+				 // code zum starten der painting funktion
 			 }
-private: System::Void btnLoadImage_Click(System::Object^  sender, System::EventArgs^  e) {
-			 // Hier Bild laden zum initiallisieren
 		 }
-private: System::Void txtThreads_TextChanged(System::Object^  sender, System::EventArgs^  e) {
-			 
-		 }
+}
+}
 };
 }
 
