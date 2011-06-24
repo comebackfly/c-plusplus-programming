@@ -4,14 +4,16 @@ using namespace System;
 using namespace System::Threading;
 
 
-ref class PaintThread
+public ref class PaintThread
 {
 public:
 	PaintThread(void);
 	PaintThread(ImageObject* imageObject);
-	void drawRectangle(int x0, int y0, int x1, int y1, int r, int g, int b, int alpha);
+	static void drawRectangle(int x0, int y0, int x1, int y1, int r, int g, int b, double alpha);
+	static int generateIntegerNumber(int start, int end);
+	static double generateDoubleNumber(int start, int end);
 	static void drawing(int loops);
 
-	ImageObject* imageObject;
+	static ImageObject* imageObject;
 };
 
