@@ -24,7 +24,7 @@ int main(array<System::String ^> ^args)
 
 	 PaintThread^ paintThread = gcnew PaintThread(new ImageObject());
 
-	 Thread^ oThread = gcnew Thread( gcnew ThreadStart(paintThread, &PaintThread::drawing(5)));
+	 Thread^ oThread = gcnew Thread(gcnew ThreadStart(paintThread, PaintThread::drawing(5)));
 
    // Start ThreadProc.  Note that on a uniprocessor, the new 
    // thread does not get any processor time until the main thread 
