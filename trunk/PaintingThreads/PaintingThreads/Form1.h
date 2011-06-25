@@ -17,6 +17,7 @@ namespace PaintingThreads {
 	{
 	public:
 		static int loadImageOk = 0;
+		static int startPaintingOk = 0;
 		Form1(void)
 		{
 			InitializeComponent();
@@ -90,10 +91,11 @@ namespace PaintingThreads {
 			// 
 			// grpCtrl
 			// 
+			this->grpCtrl->BackColor = System::Drawing::Color::White;
 			this->grpCtrl->Controls->Add(this->btnStartPainting);
 			this->grpCtrl->Controls->Add(this->grpPaintOptions);
 			this->grpCtrl->Controls->Add(this->btnLoadImage);
-			this->grpCtrl->Location = System::Drawing::Point(13, 13);
+			this->grpCtrl->Location = System::Drawing::Point(12, 12);
 			this->grpCtrl->Name = L"grpCtrl";
 			this->grpCtrl->Size = System::Drawing::Size(144, 265);
 			this->grpCtrl->TabIndex = 0;
@@ -102,9 +104,9 @@ namespace PaintingThreads {
 			// 
 			// btnStartPainting
 			// 
-			this->btnStartPainting->Location = System::Drawing::Point(21, 231);
+			this->btnStartPainting->Location = System::Drawing::Point(6, 231);
 			this->btnStartPainting->Name = L"btnStartPainting";
-			this->btnStartPainting->Size = System::Drawing::Size(75, 23);
+			this->btnStartPainting->Size = System::Drawing::Size(81, 23);
 			this->btnStartPainting->TabIndex = 8;
 			this->btnStartPainting->Text = L"start painting";
 			this->btnStartPainting->UseVisualStyleBackColor = true;
@@ -196,6 +198,7 @@ namespace PaintingThreads {
 			// 
 			// pictureBox
 			// 
+			this->pictureBox->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
 			this->pictureBox->Location = System::Drawing::Point(167, 12);
 			this->pictureBox->Name = L"pictureBox";
 			this->pictureBox->Size = System::Drawing::Size(640, 480);
@@ -205,12 +208,13 @@ namespace PaintingThreads {
 			// 
 			// btnPause
 			// 
-			this->btnPause->Location = System::Drawing::Point(64, 284);
+			this->btnPause->Location = System::Drawing::Point(106, 284);
 			this->btnPause->Name = L"btnPause";
 			this->btnPause->Size = System::Drawing::Size(45, 23);
 			this->btnPause->TabIndex = 9;
 			this->btnPause->Text = L"pause";
 			this->btnPause->UseVisualStyleBackColor = true;
+			this->btnPause->Click += gcnew System::EventHandler(this, &Form1::btnPause_Click);
 			// 
 			// openFile1
 			// 
@@ -278,6 +282,7 @@ namespace PaintingThreads {
 			}
 		}
 	}
+
 	// slider threads
 	private: System::Void trbThreads_Scroll(System::Object^  sender, System::EventArgs^  e) {
 		txtThreads->Text = System::Convert::ToString(trbThreads->Value);
@@ -311,15 +316,28 @@ namespace PaintingThreads {
 			}
 		}
 	}
+
 	// button startPainting
 	private: System::Void btnStartPainting_Click(System::Object^  sender, System::EventArgs^  e) {
 			 if(!loadImageOk) {
 				System::Windows::Forms::MessageBox::Show("Bitte zuerst ein Bild laden");
 			 } else {
+				 
 				 // code zum starten der painting funktion
+				 
+				 startPaintingOk = 1;
 			 }
 		 }
 
+	// pause button to get a result picture
+	private: System::Void btnPause_Click(System::Object^  sender, System::EventArgs^  e) {
+			if(!loadImageOk || !startPaintingOk) {
+				System::Windows::Forms::MessageBox::Show("painting noch nicht gestartet");
+			} else {
+				
+				// code fuer die pause funktion
+			}
+		 }
 };
 }
 
