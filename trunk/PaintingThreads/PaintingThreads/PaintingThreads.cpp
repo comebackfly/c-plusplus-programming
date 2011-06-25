@@ -4,9 +4,10 @@
 #include "Form1.h"
 #include "PaintThread.h"
 
-using namespace PaintingThreads;
 using namespace System;
 using namespace System::Threading;
+using namespace PaintingThreads;
+
 
 [STAThreadAttribute]
 int main(array<System::String ^> ^args)
@@ -22,23 +23,19 @@ int main(array<System::String ^> ^args)
    // delegate representing a static method, no object is
    // required.
 
-	 PaintThread^ paintThread = gcnew PaintThread(new ImageObject());
+	PaintThread^ paintThread = gcnew PaintThread();
 
-	 Thread^ oThread = gcnew Thread(gcnew ThreadStart(paintThread, PaintThread::drawing(5)));
+	Thread^ InstanceCaller = gcnew Thread(gcnew ThreadStart(paintThread, &PaintThread::Drawing(5)));
+    InstanceCaller->Start();
 
-   // Start ThreadProc.  Note that on a uniprocessor, the new 
-   // thread does not get any processor time until the main thread 
-   // is preempted or yields.  Uncomment the Thread::Sleep that 
-   // follows oThread->Start() to see the difference.
-   oThread->Start();
 
    //Thread::Sleep(0);
-   for ( int i = 0; i < 4; i++ )
+  /* for ( int i = 0; i < 4; i++ )
    {
       Console::WriteLine(  "Main thread: Do some work." );
       Thread::Sleep( 0 );
 
-   }
+   }*/
 
 	// Create the main window and run it
 	Application::Run(gcnew Form1());

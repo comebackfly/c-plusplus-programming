@@ -20,7 +20,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <CLRSupport>Pure</CLRSupport>
+    <CLRSupport>true</CLRSupport>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
@@ -105,6 +105,7 @@
     <ClInclude Include="HTWStringConverter.h" />
     <ClInclude Include="ImageLoader.h" />
     <ClInclude Include="ImageObject.h" />
+    <ClInclude Include="LockClasses.h" />
     <ClInclude Include="PaintThread.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="stdafx.h" />

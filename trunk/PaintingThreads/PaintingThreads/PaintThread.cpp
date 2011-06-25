@@ -5,7 +5,11 @@
 #include <ctime> 
 #include <iostream>
 
+#using <mscorlib.dll>
+
 using namespace std;
+using namespace System;
+using namespace System::Threading;
 
 
 PaintThread::PaintThread(void)
@@ -13,8 +17,13 @@ PaintThread::PaintThread(void)
 
 }
 
+PaintThread::~PaintThread(void)
+{
+
+}
+
 PaintThread::PaintThread(ImageObject* imageObject){
-	this->imageObject=imageObject;
+	imageObject=imageObject;
 }
 
 void PaintThread::drawRectangle(int x0, int y0, int x1, int y1, int r, int g, int b, double alpha){
@@ -35,7 +44,7 @@ void PaintThread::drawRectangle(int x0, int y0, int x1, int y1, int r, int g, in
 	}
 }
 	
- void PaintThread::drawing(int loops){
+ void PaintThread::Drawing(int loops){
 
 	for ( int i = 0; i < loops; i++ ){
 
@@ -55,37 +64,37 @@ void PaintThread::drawRectangle(int x0, int y0, int x1, int y1, int r, int g, in
 	{
 		//left top corner
 		case 1: 
-			x0 = generateIntegerNumber(0, PaintThread::imageObject->getWidth()/2);
-			y0 = generateIntegerNumber(0, PaintThread::imageObject->getHeight()/2);
-			x1 = generateIntegerNumber(1, PaintThread::imageObject->getWidth()/2);
-			y1 = generateIntegerNumber(1, PaintThread::imageObject->getHeight()/2);
+			x0 = generateIntegerNumber(0, imageObject->getWidth()/2);
+			y0 = generateIntegerNumber(0, imageObject->getHeight()/2);
+			x1 = generateIntegerNumber(1, imageObject->getWidth()/2);
+			y1 = generateIntegerNumber(1, imageObject->getHeight()/2);
 			
 			drawRectangle(x0, y0, x1, y1, r, g, b, alpha);
  
 		//right top corner
 		case 2: 
-			x0 = generateIntegerNumber(PaintThread::imageObject->getWidth()/2+1, PaintThread::imageObject->getWidth());
-			y0 = generateIntegerNumber(PaintThread::imageObject->getHeight()/2+1, PaintThread::imageObject->getHeight());
-			x1 = generateIntegerNumber(PaintThread::imageObject->getWidth()/2+2, PaintThread::imageObject->getWidth());
-			y1 = generateIntegerNumber(PaintThread::imageObject->getHeight()/2+2, PaintThread::imageObject->getHeight());
+			x0 = generateIntegerNumber(imageObject->getWidth()/2+1, imageObject->getWidth());
+			y0 = generateIntegerNumber(imageObject->getHeight()/2+1, imageObject->getHeight());
+			x1 = generateIntegerNumber(imageObject->getWidth()/2+2, imageObject->getWidth());
+			y1 = generateIntegerNumber(imageObject->getHeight()/2+2, imageObject->getHeight());
 			
 			drawRectangle(x0, y0, x1, y1, r, g, b, alpha);
  
 		//left bottom corner
 		case 3: 
-			x0 = generateIntegerNumber(0, PaintThread::imageObject->getWidth()/2);
-			y0 = generateIntegerNumber(PaintThread::imageObject->getHeight()/2+1, PaintThread::imageObject->getHeight());
-			x1 = generateIntegerNumber(1, PaintThread::imageObject->getWidth()/2);
-			y1 = generateIntegerNumber(PaintThread::imageObject->getHeight()/2+2, PaintThread::imageObject->getHeight());
+			x0 = generateIntegerNumber(0, imageObject->getWidth()/2);
+			y0 = generateIntegerNumber(imageObject->getHeight()/2+1, imageObject->getHeight());
+			x1 = generateIntegerNumber(1, imageObject->getWidth()/2);
+			y1 = generateIntegerNumber(imageObject->getHeight()/2+2, imageObject->getHeight());
 			
 			drawRectangle(x0, y0, x1, y1, r, g, b, alpha);
  
 		//right bottom corner
 		case 4: 
-			x0 = generateIntegerNumber(PaintThread::imageObject->getWidth()/2+1, PaintThread::imageObject->getWidth());
-			y0 = generateIntegerNumber(PaintThread::imageObject->getHeight()/2+1, PaintThread::imageObject->getHeight());
-			x1 = generateIntegerNumber(PaintThread::imageObject->getWidth()/2+2, PaintThread::imageObject->getWidth());
-			y1 = generateIntegerNumber(PaintThread::imageObject->getHeight()/2+2, PaintThread::imageObject->getHeight());
+			x0 = generateIntegerNumber(imageObject->getWidth()/2+1, imageObject->getWidth());
+			y0 = generateIntegerNumber(imageObject->getHeight()/2+1, imageObject->getHeight());
+			x1 = generateIntegerNumber(imageObject->getWidth()/2+2, imageObject->getWidth());
+			y1 = generateIntegerNumber(imageObject->getHeight()/2+2, imageObject->getHeight());
 			
 			drawRectangle(x0, y0, x1, y1, r, g, b, alpha);
 
@@ -93,10 +102,10 @@ void PaintThread::drawRectangle(int x0, int y0, int x1, int y1, int r, int g, in
 		case 5: 
 
 			//lock with semaphores
-			x0 = generateIntegerNumber(0, PaintThread::imageObject->getWidth());
-			y0 = generateIntegerNumber(0, PaintThread::imageObject->getHeight());
-			x1 = generateIntegerNumber(1, PaintThread::imageObject->getWidth());
-			y1 = generateIntegerNumber(1, PaintThread::imageObject->getHeight());
+			x0 = generateIntegerNumber(0, imageObject->getWidth());
+			y0 = generateIntegerNumber(0, imageObject->getHeight());
+			x1 = generateIntegerNumber(1, imageObject->getWidth());
+			y1 = generateIntegerNumber(1, imageObject->getHeight());
 			
 			drawRectangle(x0, y0, x1, y1, r, g, b, alpha);
 	}
@@ -121,7 +130,7 @@ void PaintThread::drawRectangle(int x0, int y0, int x1, int y1, int r, int g, in
 		return randomNumber;
 	}
 
-	double generateDoubleNumber(int start, int end){
+	double PaintThread::generateDoubleNumber(int start, int end){
 
 		return start+ (end - start) * rand() / ((double) RAND_MAX);
 	}
