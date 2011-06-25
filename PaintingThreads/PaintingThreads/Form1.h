@@ -24,7 +24,7 @@ namespace PaintingThreads {
 	public:
 		static int loadImageOk = 0;
 		static int startPaintingOk = 0;
-		static ImageObject* backgroundImage;
+		ImageObject* backgroundImage;
 
 		Form1(void)
 		{
@@ -333,11 +333,12 @@ namespace PaintingThreads {
 					 System::Windows::Forms::MessageBox::Show("Bitte zuerst ein Bild laden");
 				 } else {
 
-					 for(int i=0; i<System::Convert::ToInt32(txtLoops->Text); i++){
+					 for(int i=0; i<System::Convert::ToInt32(txtThreads->Text); i++){
 
 						 // code zum starten der painting funktion
 						  PaintThread^ paintThread = gcnew PaintThread(backgroundImage);
-						  paintThread->startThread();
+
+						  paintThread->startThread(System::Convert::ToInt32(txtLoops->Text));
 						  System::Windows::Forms::MessageBox::Show("Thread fertig");
 
 					 }
