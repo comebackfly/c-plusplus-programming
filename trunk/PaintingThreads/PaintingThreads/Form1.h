@@ -16,7 +16,7 @@ namespace PaintingThreads {
 	public ref class Form1 : public System::Windows::Forms::Form
 	{
 	public:
-		int loadImageOk = 0;
+		static int loadImageOk = 0;
 		Form1(void)
 		{
 			InitializeComponent();
@@ -50,8 +50,9 @@ namespace PaintingThreads {
 	private: System::Windows::Forms::Button^  btnLoadImage;
 	private: System::Windows::Forms::PictureBox^  pictureBox;
 	private: System::Windows::Forms::Button^  btnPause;
-	private: System::Windows::Forms::OpenFileDialog^  openFile;
-			 
+	private: System::Windows::Forms::OpenFileDialog^  openFile1;
+
+
 
 
 	private:
@@ -79,6 +80,7 @@ namespace PaintingThreads {
 			this->btnLoadImage = (gcnew System::Windows::Forms::Button());
 			this->pictureBox = (gcnew System::Windows::Forms::PictureBox());
 			this->btnPause = (gcnew System::Windows::Forms::Button());
+			this->openFile1 = (gcnew System::Windows::Forms::OpenFileDialog());
 			this->grpCtrl->SuspendLayout();
 			this->grpPaintOptions->SuspendLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->trbThreads))->BeginInit();
@@ -136,10 +138,11 @@ namespace PaintingThreads {
 			// txtLoops
 			// 
 			this->txtLoops->Location = System::Drawing::Point(91, 104);
+			this->txtLoops->MaxLength = 4;
 			this->txtLoops->Name = L"txtLoops";
-			this->txtLoops->ReadOnly = true;
 			this->txtLoops->Size = System::Drawing::Size(34, 20);
 			this->txtLoops->TabIndex = 4;
+			this->txtLoops->Text = L"100";
 			this->txtLoops->TextChanged += gcnew System::EventHandler(this, &Form1::txtLoops_TextChanged);
 			// 
 			// lblLoops
@@ -154,10 +157,11 @@ namespace PaintingThreads {
 			// txtThreads
 			// 
 			this->txtThreads->Location = System::Drawing::Point(91, 40);
+			this->txtThreads->MaxLength = 2;
 			this->txtThreads->Name = L"txtThreads";
-			this->txtThreads->ReadOnly = true;
 			this->txtThreads->Size = System::Drawing::Size(34, 20);
 			this->txtThreads->TabIndex = 3;
+			this->txtThreads->Text = L"1";
 			this->txtThreads->TextChanged += gcnew System::EventHandler(this, &Form1::txtThreads_TextChanged);
 			// 
 			// lblThreads
@@ -177,7 +181,7 @@ namespace PaintingThreads {
 			this->trbLoops->Name = L"trbLoops";
 			this->trbLoops->Size = System::Drawing::Size(75, 45);
 			this->trbLoops->TabIndex = 2;
-			this->trbLoops->Value = 1;
+			this->trbLoops->Value = 100;
 			this->trbLoops->Scroll += gcnew System::EventHandler(this, &Form1::trbLoops_Scroll);
 			// 
 			// btnLoadImage
@@ -195,6 +199,7 @@ namespace PaintingThreads {
 			this->pictureBox->Location = System::Drawing::Point(167, 12);
 			this->pictureBox->Name = L"pictureBox";
 			this->pictureBox->Size = System::Drawing::Size(640, 480);
+			this->pictureBox->SizeMode = System::Windows::Forms::PictureBoxSizeMode::StretchImage;
 			this->pictureBox->TabIndex = 1;
 			this->pictureBox->TabStop = false;
 			// 
@@ -206,6 +211,10 @@ namespace PaintingThreads {
 			this->btnPause->TabIndex = 9;
 			this->btnPause->Text = L"pause";
 			this->btnPause->UseVisualStyleBackColor = true;
+			// 
+			// openFile1
+			// 
+			this->openFile1->FileName = L"file";
 			// 
 			// Form1
 			// 
@@ -225,7 +234,7 @@ namespace PaintingThreads {
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->trbLoops))->EndInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->pictureBox))->EndInit();
 			this->ResumeLayout(false);
-			
+
 		}
 #pragma endregion
 	private: System::Void Form1_Load(System::Object^  sender, System::EventArgs^  e) {
@@ -233,15 +242,15 @@ namespace PaintingThreads {
 	// load image button
 	private: System::Void btnLoadImage_Click(System::Object^  sender, System::EventArgs^  e) {
 		// file dialog zum laden des bildes
-		if(openFile->ShowDialog() == System::Windows::Forms::DialogResult::OK)
+		if(openFile1->ShowDialog() == System::Windows::Forms::DialogResult::OK)
 		{
 			System::IO::StreamReader ^ sr = gcnew
-			System::IO::StreamReader(openFile->FileName);
+			System::IO::StreamReader(openFile1->FileName);
 			sr->Close();
 			pictureBox->Enabled = "True";
 			// load image into picture box
-			pictureBox->Image = Image::FromFile(openFile->FileName);
-			//discharge = ImageLoader::loadImage(Image::FromFile(openFile->FileName)->Width,Image::FromFile(openFile1->FileName)->Height,3,HTWStringConverter::Sys2Std(openFile1->FileName));
+			pictureBox->Image = Image::FromFile(openFile1->FileName);
+			//discharge = ImageLoader::loadImage(Image::FromFile(openFile1->FileName)->Width,Image::FromFile(openFile1->FileName)->Height,3,HTWStringConverter::Sys2Std(openFile1->FileName));
 			loadImageOk = 1;
 		}
 	}
@@ -258,10 +267,10 @@ namespace PaintingThreads {
 		}
 		else {
 			// pruefen ob > 10 oder <0
-			if(System::Convert::ToInt32(txtThreads->Text)>=10) {
+			if(System::Convert::ToInt32(txtThreads->Text)>10) {
 				System::Windows::Forms::MessageBox::Show("Wert zwischen 1 und 10");
 				txtThreads->Text= "10";
-			} else if(System::Convert::ToInt32(txtThreads->Text)<0) {
+			} else if(System::Convert::ToInt32(txtThreads->Text)<1) {
 				System::Windows::Forms::MessageBox::Show("Wert zwischen 1 und 10");
 				txtThreads->Text= "1";
 			} else {
@@ -273,10 +282,12 @@ namespace PaintingThreads {
 	private: System::Void trbThreads_Scroll(System::Object^  sender, System::EventArgs^  e) {
 		txtThreads->Text = System::Convert::ToString(trbThreads->Value);
 	}	
+
 	// slider loops
 	private: System::Void trbLoops_Scroll(System::Object^  sender, System::EventArgs^  e) {
 			txtLoops->Text = System::Convert::ToString(trbLoops->Value);
 	}
+
 	// text slider loops
 	private: System::Void txtLoops_TextChanged(System::Object^  sender, System::EventArgs^  e) {
 		int loopsSlider;
@@ -289,10 +300,10 @@ namespace PaintingThreads {
 		}
 		else {
 			// pruefen ob > 5000 oder <0
-			if(System::Convert::ToInt32(txtLoops->Text)>=5000) {
+			if(System::Convert::ToInt32(txtLoops->Text)>5000) {
 				System::Windows::Forms::MessageBox::Show("Wert zwischen 1 und 5000");
 				txtLoops->Text= "5000";
-			} else if(System::Convert::ToInt32(txtLoops->Text)<0) {
+			} else if(System::Convert::ToInt32(txtLoops->Text)<1) {
 				System::Windows::Forms::MessageBox::Show("Wert zwischen 1 und 5000");
 				txtLoops->Text= "1";
 			} else {
