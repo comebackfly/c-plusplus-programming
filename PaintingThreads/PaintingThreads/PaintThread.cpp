@@ -27,10 +27,10 @@ void PaintThread::drawRectangle(int x0, int y0, int x1, int y1, int r, int g, in
 	pixel[2]=r;
 
 	for(int i=x0; i<x1-x0; i+=imageObject->getBytesPerPixel()){
-		this->imageObject->setPixelValue(i, pixel);
+		imageObject->setPixelValue(i, pixel);
 
 		for(int j=y0; j<y1-y0; j+=imageObject->getBytesPerPixel()){
-			this->imageObject->setPixelValue(j, pixel);
+			imageObject->setPixelValue(j, pixel);
 		}
 	}
 }
