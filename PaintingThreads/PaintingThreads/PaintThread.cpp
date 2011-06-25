@@ -43,62 +43,62 @@ void PaintThread::drawRectangle(int x0, int y0, int x1, int y1, int r, int g, in
 		}
 	}
 }
-	
- void PaintThread::Drawing(int loops){
+
+void PaintThread::Drawing(int loops){
 
 	for ( int i = 0; i < loops; i++ ){
 
-	int quadrantDecision = generateIntegerNumber(0, 5);
+		int quadrantDecision = generateIntegerNumber(0, 5);
 
-	int r = generateIntegerNumber(0, 255);
-	int g = generateIntegerNumber(0, 255);
-	int b = generateIntegerNumber(0, 255);
-	double alpha = generateDoubleNumber(0, 1);
+		int r = generateIntegerNumber(0, 255);
+		int g = generateIntegerNumber(0, 255);
+		int b = generateIntegerNumber(0, 255);
+		double alpha = generateDoubleNumber(0, 1);
 
-	int x0 = 0;
-	int y0 = 0;
-	int x1 = 0;
-	int y1 = 0;
+		int x0 = 0;
+		int y0 = 0;
+		int x1 = 0;
+		int y1 = 0;
 
-	switch(quadrantDecision)
-	{
-		//left top corner
+		switch(quadrantDecision)
+		{
+			//left top corner
 		case 1: 
 			x0 = generateIntegerNumber(0, imageObject->getWidth()/2);
 			y0 = generateIntegerNumber(0, imageObject->getHeight()/2);
 			x1 = generateIntegerNumber(1, imageObject->getWidth()/2);
 			y1 = generateIntegerNumber(1, imageObject->getHeight()/2);
-			
+
 			drawRectangle(x0, y0, x1, y1, r, g, b, alpha);
- 
-		//right top corner
+
+			//right top corner
 		case 2: 
 			x0 = generateIntegerNumber(imageObject->getWidth()/2+1, imageObject->getWidth());
 			y0 = generateIntegerNumber(imageObject->getHeight()/2+1, imageObject->getHeight());
 			x1 = generateIntegerNumber(imageObject->getWidth()/2+2, imageObject->getWidth());
 			y1 = generateIntegerNumber(imageObject->getHeight()/2+2, imageObject->getHeight());
-			
+
 			drawRectangle(x0, y0, x1, y1, r, g, b, alpha);
- 
-		//left bottom corner
+
+			//left bottom corner
 		case 3: 
 			x0 = generateIntegerNumber(0, imageObject->getWidth()/2);
 			y0 = generateIntegerNumber(imageObject->getHeight()/2+1, imageObject->getHeight());
 			x1 = generateIntegerNumber(1, imageObject->getWidth()/2);
 			y1 = generateIntegerNumber(imageObject->getHeight()/2+2, imageObject->getHeight());
-			
+
 			drawRectangle(x0, y0, x1, y1, r, g, b, alpha);
- 
-		//right bottom corner
+
+			//right bottom corner
 		case 4: 
 			x0 = generateIntegerNumber(imageObject->getWidth()/2+1, imageObject->getWidth());
 			y0 = generateIntegerNumber(imageObject->getHeight()/2+1, imageObject->getHeight());
 			x1 = generateIntegerNumber(imageObject->getWidth()/2+2, imageObject->getWidth());
 			y1 = generateIntegerNumber(imageObject->getHeight()/2+2, imageObject->getHeight());
-			
+
 			drawRectangle(x0, y0, x1, y1, r, g, b, alpha);
 
-		//overall
+			//overall
 		case 5: 
 
 			//lock with semaphores
@@ -106,31 +106,31 @@ void PaintThread::drawRectangle(int x0, int y0, int x1, int y1, int r, int g, in
 			y0 = generateIntegerNumber(0, imageObject->getHeight());
 			x1 = generateIntegerNumber(1, imageObject->getWidth());
 			y1 = generateIntegerNumber(1, imageObject->getHeight());
-			
+
 			drawRectangle(x0, y0, x1, y1, r, g, b, alpha);
+		}
+
+		Console::Write(  "painting. loop: "+i );
+
 	}
 
-	   Console::Write(  "painting. loop: "+i );
+	// Yield the rest of the time slice.
+	Thread::Sleep( 0 );
+}
 
-	}
+int PaintThread::generateIntegerNumber(int start, int end){
+	//decide in which quadrant will be drawn
+	srand((unsigned)time(0)); 
+	int randomNumber; 
 
-    // Yield the rest of the time slice.
-    Thread::Sleep( 0 );
-    }
+	for(int i=start; i<end*2; i++){ 
+		randomNumber = (rand()%end)+1; 
+		cout << randomNumber << endl; 
+	} 
+	return randomNumber;
+}
 
-	int PaintThread::generateIntegerNumber(int start, int end){
-		//decide in which quadrant will be drawn
-		srand((unsigned)time(0)); 
-		int randomNumber; 
+double PaintThread::generateDoubleNumber(int start, int end){
 
-		for(int i=start; i<end*2; i++){ 
-			randomNumber = (rand()%end)+1; 
-			cout << randomNumber << endl; 
-		} 
-		return randomNumber;
-	}
-
-	double PaintThread::generateDoubleNumber(int start, int end){
-
-		return start+ (end - start) * rand() / ((double) RAND_MAX);
-	}
+	return start+ (end - start) * rand() / ((double) RAND_MAX);
+}

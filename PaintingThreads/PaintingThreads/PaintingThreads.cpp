@@ -16,26 +16,23 @@ int main(array<System::String ^> ^args)
 	Application::EnableVisualStyles();
 	Application::SetCompatibleTextRenderingDefault(false); 
 
-	 Console::WriteLine( "Main thread: Start a second thread." );
+	Console::WriteLine( "Main thread: Start a second thread." );
 
-   // Create the thread, passing a ThreadStart delegate that
-   // represents the ThreadExample::ThreadProc method.  For a 
-   // delegate representing a static method, no object is
-   // required.
-
-	PaintThread^ paintThread = gcnew PaintThread();
-
-	Thread^ InstanceCaller = gcnew Thread(gcnew ThreadStart(paintThread, &PaintThread::Drawing(5)));
-    InstanceCaller->Start();
+	// Create the thread, passing a ThreadStart delegate that
+	// represents the ThreadExample::ThreadProc method.  For a 
+	// delegate representing a static method, no object is
+	// required.
 
 
-   //Thread::Sleep(0);
-  /* for ( int i = 0; i < 4; i++ )
-   {
-      Console::WriteLine(  "Main thread: Do some work." );
-      Thread::Sleep( 0 );
 
-   }*/
+
+	//Thread::Sleep(0);
+	/* for ( int i = 0; i < 4; i++ )
+	{
+	Console::WriteLine(  "Main thread: Do some work." );
+	Thread::Sleep( 0 );
+
+	}*/
 
 	// Create the main window and run it
 	Application::Run(gcnew Form1());

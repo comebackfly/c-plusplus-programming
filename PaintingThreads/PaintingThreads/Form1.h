@@ -1,6 +1,8 @@
 #pragma once
-	#include "ImageObject.h"
-	#include "PaintThread.h"
+#include "ImageObject.h"
+#include "PaintThread.h"
+#include "ImageLoader.h"
+#include "HTWStringConverter.h"
 
 namespace PaintingThreads {
 
@@ -22,10 +24,12 @@ namespace PaintingThreads {
 	public:
 		static int loadImageOk = 0;
 		static int startPaintingOk = 0;
+		ImageObject* backgroundImage;
+
 		Form1(void)
 		{
 			InitializeComponent();
-			
+
 			//
 			//TODO: Add the constructor code here
 			//
@@ -247,112 +251,114 @@ namespace PaintingThreads {
 		}
 #pragma endregion
 	private: System::Void Form1_Load(System::Object^  sender, System::EventArgs^  e) {
-	}
-	// load image button
+			 }
+			 // load image button
 	private: System::Void btnLoadImage_Click(System::Object^  sender, System::EventArgs^  e) {
-		// file dialog zum laden des bildes
-		if(openFile1->ShowDialog() == System::Windows::Forms::DialogResult::OK)
-		{
-			System::IO::StreamReader ^ sr = gcnew
-			System::IO::StreamReader(openFile1->FileName);
-			sr->Close();
-			pictureBox->Enabled = "True";
-			// load image into picture box
-			pictureBox->Image = Image::FromFile(openFile1->FileName);
-			//discharge = ImageLoader::loadImage(Image::FromFile(openFile1->FileName)->Width,Image::FromFile(openFile1->FileName)->Height,3,HTWStringConverter::Sys2Std(openFile1->FileName));
-			loadImageOk = 1;
-		}
-	}
+				 // file dialog zum laden des bildes
+				 if(openFile1->ShowDialog() == System::Windows::Forms::DialogResult::OK)
+				 {
+					 System::IO::StreamReader ^ sr = gcnew
+						 System::IO::StreamReader(openFile1->FileName);
+					 sr->Close();
+					 pictureBox->Enabled = "True";
+					 // load image into picture box
+					 pictureBox->Image = Image::FromFile(openFile1->FileName);
+					 backgroundImage = ImageLoader::loadImage(Image::FromFile(openFile1->FileName)->Width,Image::FromFile(openFile1->FileName)->Height,3,HTWStringConverter::Sys2Std(openFile1->FileName));
+					 loadImageOk = 1;
+				 }
+			 }
 
-	// text slider threads
+			 // text slider threads
 	private: System::Void txtThreads_TextChanged(System::Object^  sender, System::EventArgs^  e) {
-		int threadSlider;
-		// pruefen ob Wert eine Zahl ist
-		if(!Int32::TryParse(txtThreads->Text, threadSlider)) {
-			// keine Zahl
-			System::Windows::Forms::MessageBox::Show("Wert zwischen 1 und 10");
-			//default wert
-			txtThreads->Text = "1";
-		}
-		else {
-			// pruefen ob > 10 oder <0
-			if(System::Convert::ToInt32(txtThreads->Text)>10) {
-				System::Windows::Forms::MessageBox::Show("Wert zwischen 1 und 10");
-				txtThreads->Text= "10";
-			} else if(System::Convert::ToInt32(txtThreads->Text)<1) {
-				System::Windows::Forms::MessageBox::Show("Wert zwischen 1 und 10");
-				txtThreads->Text= "1";
-			} else {
-				trbThreads->Value = System::Convert::ToInt32(txtThreads->Text);
-			}
-		}
-	}
+				 int threadSlider;
+				 // pruefen ob Wert eine Zahl ist
+				 if(!Int32::TryParse(txtThreads->Text, threadSlider)) {
+					 // keine Zahl
+					 System::Windows::Forms::MessageBox::Show("Wert zwischen 1 und 10");
+					 //default wert
+					 txtThreads->Text = "1";
+				 }
+				 else {
+					 // pruefen ob > 10 oder <0
+					 if(System::Convert::ToInt32(txtThreads->Text)>10) {
+						 System::Windows::Forms::MessageBox::Show("Wert zwischen 1 und 10");
+						 txtThreads->Text= "10";
+					 } else if(System::Convert::ToInt32(txtThreads->Text)<1) {
+						 System::Windows::Forms::MessageBox::Show("Wert zwischen 1 und 10");
+						 txtThreads->Text= "1";
+					 } else {
+						 trbThreads->Value = System::Convert::ToInt32(txtThreads->Text);
+					 }
+				 }
+			 }
 
-	// slider threads
+			 // slider threads
 	private: System::Void trbThreads_Scroll(System::Object^  sender, System::EventArgs^  e) {
-		txtThreads->Text = System::Convert::ToString(trbThreads->Value);
-	}	
+				 txtThreads->Text = System::Convert::ToString(trbThreads->Value);
+			 }	
 
-	// slider loops
+			 // slider loops
 	private: System::Void trbLoops_Scroll(System::Object^  sender, System::EventArgs^  e) {
-			txtLoops->Text = System::Convert::ToString(trbLoops->Value);
-	}
+				 txtLoops->Text = System::Convert::ToString(trbLoops->Value);
+			 }
 
-	// text slider loops
+			 // text slider loops
 	private: System::Void txtLoops_TextChanged(System::Object^  sender, System::EventArgs^  e) {
-		int loopsSlider;
-		// pruefen ob Wert eine Zahl ist
-		if(!Int32::TryParse(txtLoops->Text, loopsSlider)) {
-			// keine Zahl
-			System::Windows::Forms::MessageBox::Show("Wert zwischen 1 und 5000");
-			//default wert
-			txtThreads->Text = "100";
-		}
-		else {
-			// pruefen ob > 5000 oder <0
-			if(System::Convert::ToInt32(txtLoops->Text)>5000) {
-				System::Windows::Forms::MessageBox::Show("Wert zwischen 1 und 5000");
-				txtLoops->Text= "5000";
-			} else if(System::Convert::ToInt32(txtLoops->Text)<1) {
-				System::Windows::Forms::MessageBox::Show("Wert zwischen 1 und 5000");
-				txtLoops->Text= "1";
-			} else {
-				trbLoops->Value = System::Convert::ToInt32(txtLoops->Text);
-			}
-		}
-	}
+				 int loopsSlider;
+				 // pruefen ob Wert eine Zahl ist
+				 if(!Int32::TryParse(txtLoops->Text, loopsSlider)) {
+					 // keine Zahl
+					 System::Windows::Forms::MessageBox::Show("Wert zwischen 1 und 5000");
+					 //default wert
+					 txtThreads->Text = "100";
+				 }
+				 else {
+					 // pruefen ob > 5000 oder <0
+					 if(System::Convert::ToInt32(txtLoops->Text)>5000) {
+						 System::Windows::Forms::MessageBox::Show("Wert zwischen 1 und 5000");
+						 txtLoops->Text= "5000";
+					 } else if(System::Convert::ToInt32(txtLoops->Text)<1) {
+						 System::Windows::Forms::MessageBox::Show("Wert zwischen 1 und 5000");
+						 txtLoops->Text= "1";
+					 } else {
+						 trbLoops->Value = System::Convert::ToInt32(txtLoops->Text);
+					 }
+				 }
+			 }
 
-	// button startPainting
+			 // button startPainting
 	private: System::Void btnStartPainting_Click(System::Object^  sender, System::EventArgs^  e) {
 
-			//PaintThread^ paintThread = gcnew PaintThread();
+				 if(!loadImageOk) {
+					 System::Windows::Forms::MessageBox::Show("Bitte zuerst ein Bild laden");
+				 } else {
 
-			//Thread^ InstanceCaller = gcnew Thread(gcnew ThreadStart(paintThread, &PaintThread::Drawing(5)));
-			//InstanceCaller->Start();
+					 for(int i=0; i<System::Convert::ToInt32(txtLoops->Text); i++){
 
-			 if(!loadImageOk) {
-				System::Windows::Forms::MessageBox::Show("Bitte zuerst ein Bild laden");
-			 } else {
-				 
-				 // code zum starten der painting funktion
-				 
-				 startPaintingOk = 1;
+						 // code zum starten der painting funktion
+						 PaintThread^ paintThread = gcnew PaintThread(backgroundImage);
+
+						 Thread^ InstanceCaller = gcnew Thread(gcnew ThreadStart(paintThread, &PaintThread::Drawing(System::Convert::ToInt32(txtThreads->Text))));
+						 InstanceCaller->Start();
+					 }
+
+					 startPaintingOk = 1;
+				 }
 			 }
-		 }
 
 
-private: System::Void pictureBox_Click(System::Object^  sender, System::EventArgs^  e) {
-		 }
-	// pause button to get a result picture
+	private: System::Void pictureBox_Click(System::Object^  sender, System::EventArgs^  e) {
+			 }
+			 // pause button to get a result picture
 	private: System::Void btnPause_Click(System::Object^  sender, System::EventArgs^  e) {
-			if(!loadImageOk || !startPaintingOk) {
-				System::Windows::Forms::MessageBox::Show("painting noch nicht gestartet");
-			} else {
-				
-				// code fuer die pause funktion
-			}
-		 }
-};
+				 if(!loadImageOk || !startPaintingOk) {
+					 System::Windows::Forms::MessageBox::Show("painting noch nicht gestartet");
+				 } else {
+
+					 // code fuer die pause funktion
+				 }
+			 }
+	};
 }
 
 
