@@ -1,5 +1,6 @@
 #pragma once
 	#include "ImageObject.h"
+	#include "PaintThread.h"
 
 namespace PaintingThreads {
 
@@ -9,6 +10,9 @@ namespace PaintingThreads {
 	using namespace System::Windows::Forms;
 	using namespace System::Data;
 	using namespace System::Drawing;
+
+	using namespace System;
+	using namespace System::Threading;
 
 	/// <summary>
 	/// Summary for Form1
@@ -205,6 +209,7 @@ namespace PaintingThreads {
 			this->pictureBox->SizeMode = System::Windows::Forms::PictureBoxSizeMode::StretchImage;
 			this->pictureBox->TabIndex = 1;
 			this->pictureBox->TabStop = false;
+			this->pictureBox->Click += gcnew System::EventHandler(this, &Form1::pictureBox_Click);
 			// 
 			// btnPause
 			// 
@@ -319,6 +324,12 @@ namespace PaintingThreads {
 
 	// button startPainting
 	private: System::Void btnStartPainting_Click(System::Object^  sender, System::EventArgs^  e) {
+
+			//PaintThread^ paintThread = gcnew PaintThread();
+
+			//Thread^ InstanceCaller = gcnew Thread(gcnew ThreadStart(paintThread, &PaintThread::Drawing(5)));
+			//InstanceCaller->Start();
+
 			 if(!loadImageOk) {
 				System::Windows::Forms::MessageBox::Show("Bitte zuerst ein Bild laden");
 			 } else {
@@ -329,6 +340,10 @@ namespace PaintingThreads {
 			 }
 		 }
 
+<<<<<<< .mine
+private: System::Void pictureBox_Click(System::Object^  sender, System::EventArgs^  e) {
+		 }
+=======
 	// pause button to get a result picture
 	private: System::Void btnPause_Click(System::Object^  sender, System::EventArgs^  e) {
 			if(!loadImageOk || !startPaintingOk) {
@@ -338,6 +353,7 @@ namespace PaintingThreads {
 				// code fuer die pause funktion
 			}
 		 }
+>>>>>>> .r34
 };
 }
 
