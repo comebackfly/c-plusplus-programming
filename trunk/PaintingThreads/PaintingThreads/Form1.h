@@ -340,10 +340,9 @@ namespace PaintingThreads {
 			 }
 		 }
 
-<<<<<<< .mine
+
 private: System::Void pictureBox_Click(System::Object^  sender, System::EventArgs^  e) {
 		 }
-=======
 	// pause button to get a result picture
 	private: System::Void btnPause_Click(System::Object^  sender, System::EventArgs^  e) {
 			if(!loadImageOk || !startPaintingOk) {
@@ -353,7 +352,6 @@ private: System::Void pictureBox_Click(System::Object^  sender, System::EventArg
 				// code fuer die pause funktion
 			}
 		 }
->>>>>>> .r34
 };
 }
 
