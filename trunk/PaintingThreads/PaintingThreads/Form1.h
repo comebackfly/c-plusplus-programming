@@ -1,4 +1,5 @@
 #pragma once
+	#include "ImageObject.h"
 
 namespace PaintingThreads {
 
@@ -15,9 +16,11 @@ namespace PaintingThreads {
 	public ref class Form1 : public System::Windows::Forms::Form
 	{
 	public:
+		int loadImageOk = 0;
 		Form1(void)
 		{
 			InitializeComponent();
+			
 			//
 			//TODO: Add the constructor code here
 			//
@@ -48,7 +51,7 @@ namespace PaintingThreads {
 	private: System::Windows::Forms::PictureBox^  pictureBox;
 	private: System::Windows::Forms::Button^  btnPause;
 	private: System::Windows::Forms::OpenFileDialog^  openFile;
-			 int loadImageOk = 0;
+			 
 
 
 	private:
@@ -222,7 +225,7 @@ namespace PaintingThreads {
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->trbLoops))->EndInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->pictureBox))->EndInit();
 			this->ResumeLayout(false);
-
+			
 		}
 #pragma endregion
 	private: System::Void Form1_Load(System::Object^  sender, System::EventArgs^  e) {
@@ -305,8 +308,8 @@ namespace PaintingThreads {
 				 // code zum starten der painting funktion
 			 }
 		 }
-}
-}
+
 };
 }
+
 
