@@ -336,7 +336,8 @@ namespace PaintingThreads {
 					 for(int i=0; i<System::Convert::ToInt32(txtThreads->Text); i++){
 
 						 // code zum starten der painting funktion
-						  PaintThread^ paintThread = gcnew PaintThread(backgroundImage);
+						 QuadrantManager* qMan = new QuadrantManager();
+						  PaintThread^ paintThread = gcnew PaintThread(backgroundImage, qMan);
 
 						  paintThread->startThread(System::Convert::ToInt32(txtLoops->Text));
 						  System::Windows::Forms::MessageBox::Show("Thread fertig");

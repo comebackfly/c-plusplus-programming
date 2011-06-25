@@ -1,5 +1,6 @@
 #pragma once
 #include "ImageObject.h"
+#include "QuadrantManager.h"
 #include <cstdlib> 
 #include <ctime> 
 #include <iostream>
@@ -17,6 +18,7 @@ public ref class PaintThread
 private:
 	static int loops = 0;
 	ImageObject* imageObject;
+	QuadrantManager* qMan;
 
 public:
 
@@ -31,8 +33,9 @@ public:
 
 	}
 
-	PaintThread(ImageObject* imageObject){
+	PaintThread(ImageObject* imageObject, QuadrantManager* qMan){
 		this->imageObject=imageObject;
+		this->qMan=qMan;
 	}
 
 	void drawRectangle(int x0, int y0, int x1, int y1, int r, int g, int b, double alpha){
@@ -55,7 +58,7 @@ public:
 
 	void startThread(int loops){
 		this->loops = loops;
-		PaintThread^ paintThread = gcnew PaintThread();
+		PaintThread^ paintThread = gcnew PaintThread(imageObject, qMan);
 
 		Thread^ newThread = gcnew Thread(gcnew ParameterizedThreadStart(paintThread, &PaintThread::drawing));
 		newThread->Start();
@@ -64,6 +67,8 @@ public:
 	void drawing(Object^ data){
 
 		System::Windows::Forms::MessageBox::Show("Thread started ");
+
+		
 
 		for ( int i = 0; i < loops; i++ ){
 
@@ -83,6 +88,9 @@ public:
 			{
 				//left top corner
 			case 1: 
+
+				qMan->getTopLeftQuadrant();
+
 				x0 = generateIntegerNumber(0, this->imageObject->getWidth()/2);
 				y0 = generateIntegerNumber(0, this->imageObject->getHeight()/2);
 				x1 = generateIntegerNumber(1, this->imageObject->getWidth()/2);
@@ -90,8 +98,13 @@ public:
 
 				drawRectangle(x0, y0, x1, y1, r, g, b, alpha);
 
+				qMan->returnTopLeftQuadrant();
+
 				//right top corner
 			case 2: 
+
+				qMan->getTopRightQuadrant();
+
 				x0 = generateIntegerNumber(this->imageObject->getWidth()/2+1, this->imageObject->getWidth());
 				y0 = generateIntegerNumber(this->imageObject->getHeight()/2+1, this->imageObject->getHeight());
 				x1 = generateIntegerNumber(this->imageObject->getWidth()/2+2, this->imageObject->getWidth());
@@ -99,8 +112,13 @@ public:
 
 				drawRectangle(x0, y0, x1, y1, r, g, b, alpha);
 
+				qMan->returnTopRightQuadrant();
+
 				//left bottom corner
 			case 3: 
+
+				qMan->getBottomLeftQuadrant();
+
 				x0 = generateIntegerNumber(0, this->imageObject->getWidth()/2);
 				y0 = generateIntegerNumber(this->imageObject->getHeight()/2+1, this->imageObject->getHeight());
 				x1 = generateIntegerNumber(1, this->imageObject->getWidth()/2);
@@ -108,8 +126,13 @@ public:
 
 				drawRectangle(x0, y0, x1, y1, r, g, b, alpha);
 
+				qMan->returnBottomLeftQuadrant();
+
 				//right bottom corner
 			case 4: 
+
+				qMan->getBottomRightQuadrant();
+
 				x0 = generateIntegerNumber(this->imageObject->getWidth()/2+1, this->imageObject->getWidth());
 				y0 = generateIntegerNumber(this->imageObject->getHeight()/2+1, this->imageObject->getHeight());
 				x1 = generateIntegerNumber(this->imageObject->getWidth()/2+2, this->imageObject->getWidth());
@@ -117,16 +140,21 @@ public:
 
 				drawRectangle(x0, y0, x1, y1, r, g, b, alpha);
 
+				qMan->getBottomRightQuadrant();
+
 				//overall
 			case 5: 
 
-				//lock with semaphores
+				qMan->getOverall();
+
 				x0 = generateIntegerNumber(0, this->imageObject->getWidth());
 				y0 = generateIntegerNumber(0, this->imageObject->getHeight());
 				x1 = generateIntegerNumber(1, this->imageObject->getWidth());
 				y1 = generateIntegerNumber(1, this->imageObject->getHeight());
 
 				drawRectangle(x0, y0, x1, y1, r, g, b, alpha);
+
+				qMan->returnOverall();
 			}
 
 		}
