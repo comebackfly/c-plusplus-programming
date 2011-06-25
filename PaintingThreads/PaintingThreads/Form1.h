@@ -3,6 +3,15 @@
 #include "PaintThread.h"
 #include "ImageLoader.h"
 #include "HTWStringConverter.h"
+//#include "graphlibHTW.h"
+
+#include <windows.h>
+#pragma comment(lib, "gdi32.lib")
+#pragma comment(lib, "User32.lib")
+#include <WinDef.h>
+#include <iostream>
+#include <string>
+
 
 namespace PaintingThreads {
 
@@ -25,6 +34,8 @@ namespace PaintingThreads {
 		static int loadImageOk = 0;
 		static int startPaintingOk = 0;
 		ImageObject* backgroundImage;
+		ImageObject* final;
+		//PaintThread^ paintThread;
 
 		Form1(void)
 		{
@@ -332,20 +343,15 @@ namespace PaintingThreads {
 				 if(!loadImageOk) {
 					 System::Windows::Forms::MessageBox::Show("Bitte zuerst ein Bild laden");
 				 } else {
-
+					 QuadrantManager* qMan = new QuadrantManager();
 					 for(int i=0; i<System::Convert::ToInt32(txtThreads->Text); i++){
-
 						 // code zum starten der painting funktion
-						 QuadrantManager* qMan = new QuadrantManager();
-						  PaintThread^ paintThread = gcnew PaintThread(backgroundImage, qMan);
-
-						  paintThread->startThread(System::Convert::ToInt32(txtLoops->Text));
-						  System::Windows::Forms::MessageBox::Show("Thread fertig");
-
+						  PaintThread^ paintThread = gcnew PaintThread(backgroundImage, qMan,System::Convert::ToInt32(txtLoops->Text));
+						  }
 					 }
 
-					 startPaintingOk = 1;
-				 }
+				startPaintingOk = 1;
+				 
 			 }
 
 
@@ -357,7 +363,6 @@ namespace PaintingThreads {
 					 System::Windows::Forms::MessageBox::Show("painting noch nicht gestartet");
 				 } else {
 
-					 // code fuer die pause funktion
 				 }
 			 }
 	};
