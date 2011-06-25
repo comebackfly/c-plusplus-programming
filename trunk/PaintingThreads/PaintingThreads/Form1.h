@@ -149,6 +149,7 @@ namespace PaintingThreads {
 			// trbThreads
 			// 
 			this->trbThreads->Location = System::Drawing::Point(10, 40);
+			this->trbThreads->Maximum = 100;
 			this->trbThreads->Minimum = 1;
 			this->trbThreads->Name = L"trbThreads";
 			this->trbThreads->Size = System::Drawing::Size(75, 45);
@@ -291,9 +292,9 @@ namespace PaintingThreads {
 				 }
 				 else {
 					 // pruefen ob > 10 oder <0
-					 if(System::Convert::ToInt32(txtThreads->Text)>10) {
+					 if(System::Convert::ToInt32(txtThreads->Text)>100) {
 						 System::Windows::Forms::MessageBox::Show("Wert zwischen 1 und 10");
-						 txtThreads->Text= "10";
+						 txtThreads->Text= "100";
 					 } else if(System::Convert::ToInt32(txtThreads->Text)<1) {
 						 System::Windows::Forms::MessageBox::Show("Wert zwischen 1 und 10");
 						 txtThreads->Text= "1";
@@ -362,7 +363,9 @@ namespace PaintingThreads {
 				 if(!loadImageOk || !startPaintingOk) {
 					 System::Windows::Forms::MessageBox::Show("painting noch nicht gestartet");
 				 } else {
-
+					 if(htwSaveImage("C:\\Windows\\Temp\\temp.jpg",backgroundImage->getImageContent(),backgroundImage->getWidth(), backgroundImage->getHeight(),backgroundImage->getBytesPerPixel())) {
+						pictureBox->Image = Image::FromFile("C:\\Windows\\Temp\\temp.jpg");
+					 }		
 				 }
 			 }
 	};

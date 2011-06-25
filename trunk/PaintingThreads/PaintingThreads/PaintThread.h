@@ -6,6 +6,7 @@
 #include <iostream>
 #include "graphlibHTW.h"
 
+
 //#using <mscorlib.dll>
 
 using namespace std;
@@ -46,25 +47,40 @@ public:
 		return this->imageObject;
 	}
 
-	void drawRectangle(int x0, int y0, int x1, int y1, int r, int g, int b, double alpha){
-
+	void drawRectangle(int x0, int y0, int x1, int y1, int r, int g, int b, int alpha){
+	/*	int fillR=r;
+		int fillG=g;
+		int fillB=b;
+		int alphaOld=alpha;
+		if(alpha > 0 && alpha < 255) {
+			fillR = r / (255/alpha);
+			fillG = g / (255/alpha);
+			fillB = b / (255/alpha);
+			alphaOld = 255 / (255/alpha);
+		}
 		//TODO: ALPHA VALUE IMPLEMENTATION
-		
+	*/	
 		int* pixel = new int[3];
 		pixel[0]=b;
 		pixel[1]=g;
 		pixel[2]=r;
 
-		int counterY = 0;
-		int counterX = 0;
 		for(int i=(y0*imageObject->getWidth()*imageObject->getBytesPerPixel()); i < (y1*imageObject->getWidth()*imageObject->getBytesPerPixel()); i+=imageObject->getWidth()*imageObject->getBytesPerPixel()){
-			//this->imageObject->setPixelValue(i, pixel);
-			counterY++;
 			for(int j=i+(x0*imageObject->getBytesPerPixel()); j < i+(x1*imageObject->getBytesPerPixel()); j+=imageObject->getBytesPerPixel()){
+			/*	int* oldPixel = new int[3];
+				oldPixel = this->imageObject->getPixelValue(j);
+				int oldb = oldPixel[0];
+				int oldg = oldPixel[1];
+				int oldr = oldPixel[2];
+				pixel[0] = (oldPixel[0] / alphaOld + fillB) > 255 ? 255 : (oldPixel[0] / alphaOld + fillB);
+				pixel[1] = (oldPixel[1] / alphaOld + fillG) > 255 ? 255 : (oldPixel[1] / alphaOld + fillG);
+				pixel[2] = (oldPixel[2] / alphaOld + fillR) > 255 ? 255 : (oldPixel[2] / alphaOld + fillR);
+				*/
 				this->imageObject->setPixelValue(j, pixel);
-				counterX++;
+				//delete oldPixel;
 			}
 		}
+		//delete pixel;
 		//System::Windows::Forms::MessageBox::Show(System::Convert::ToString(counterY) + " " + System::Convert::ToString(counterX) + " x= " + System::Convert::ToString(x0) + " " + System::Convert::ToString(x1) + " y= " + System::Convert::ToString(y0) + " " + System::Convert::ToString(y1));
 	}
 
@@ -80,11 +96,11 @@ public:
 		
 		for ( int i = 0; i < loops; i++ ){
 
-			int quadrantDecision = generateIntegerNumber(1, 5);
+			int quadrantDecision = generateIntegerNumber(1, 6);
 			int r = generateIntegerNumber(0, 255);
 			int g = generateIntegerNumber(0, 255);
 			int b = generateIntegerNumber(0, 255);
-			double alpha = generateDoubleNumber(0, 1);
+			int alpha = generateIntegerNumber(1, 255);
 			//System::Windows::Forms::MessageBox::Show(System::Convert::ToString(quadrantDecision) + " " + System::Convert::ToString(r));
 
 			int x0 = 0;
@@ -154,13 +170,10 @@ public:
 				break;
 			}
 		} // end for
-		
-		if(htwSaveImage("C:\\Windows\\Temp\\temp.jpg",imageObject->getImageContent(),imageObject->getWidth(), imageObject->getHeight(),imageObject->getBytesPerPixel())) {
-		}
-		
+				
 		// end thread
 		if (newThread->IsAlive) {
-			System::Windows::Forms::MessageBox::Show("Fertig" + newThread->GetHashCode());
+			//System::Windows::Forms::MessageBox::Show("Fertig" + newThread->GetHashCode());
 			newThread->Abort();
 		}
 	}
@@ -168,8 +181,10 @@ public:
 
 
 	int generateIntegerNumber(int start, int end){
-		end++;
-		//decide in which quadrant will be drawn
+		end;
+		clock_t t;
+		t = clock();
+		srand((unsigned int)t);  
 		return rand() % (end-start) + start;
 	}
 
