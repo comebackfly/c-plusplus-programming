@@ -48,7 +48,8 @@ public:
 	}
 
 	void drawRectangle(int x0, int y0, int x1, int y1, int r, int g, int b, int alpha){
-	/*	int fillR=r;
+		//with ALPHA VALUE IMPLEMENTATION
+		int fillR=r;
 		int fillG=g;
 		int fillB=b;
 		int alphaOld=alpha;
@@ -58,8 +59,7 @@ public:
 			fillB = b / (255/alpha);
 			alphaOld = 255 / (255/alpha);
 		}
-		//TODO: ALPHA VALUE IMPLEMENTATION
-	*/	
+		
 		int* pixel = new int[3];
 		pixel[0]=b;
 		pixel[1]=g;
@@ -67,15 +67,11 @@ public:
 
 		for(int i=(y0*imageObject->getWidth()*imageObject->getBytesPerPixel()); i < (y1*imageObject->getWidth()*imageObject->getBytesPerPixel()); i+=imageObject->getWidth()*imageObject->getBytesPerPixel()){
 			for(int j=i+(x0*imageObject->getBytesPerPixel()); j < i+(x1*imageObject->getBytesPerPixel()); j+=imageObject->getBytesPerPixel()){
-			/*	int* oldPixel = new int[3];
+				int* oldPixel = new int[3];
 				oldPixel = this->imageObject->getPixelValue(j);
-				int oldb = oldPixel[0];
-				int oldg = oldPixel[1];
-				int oldr = oldPixel[2];
 				pixel[0] = (oldPixel[0] / alphaOld + fillB) > 255 ? 255 : (oldPixel[0] / alphaOld + fillB);
 				pixel[1] = (oldPixel[1] / alphaOld + fillG) > 255 ? 255 : (oldPixel[1] / alphaOld + fillG);
 				pixel[2] = (oldPixel[2] / alphaOld + fillR) > 255 ? 255 : (oldPixel[2] / alphaOld + fillR);
-				*/
 				this->imageObject->setPixelValue(j, pixel);
 				//delete oldPixel;
 			}
@@ -99,7 +95,7 @@ public:
 			int r = generateIntegerNumber(0,255);
 			int g = generateIntegerNumber(10,200);
 			int b = generateIntegerNumber(50,100);
-			int alpha = generateIntegerNumber(30,225);
+			int alpha = generateIntegerNumber(0,100);
 			//System::Windows::Forms::MessageBox::Show(System::Convert::ToString(quadrantDecision) + " " + System::Convert::ToString(r));
 
 			int x0 = 0;
