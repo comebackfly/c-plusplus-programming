@@ -33,8 +33,6 @@ namespace PaintingThreads {
 	{
 		Thread^ paintingThr;
 		Thread^ pauseThr;
-		static int loadImageOk = 0;
-		static int startPaintingOk = 0;
 		static int nameId = 0;
 		ImageObject* backgroundImage;
 		ImageObject* final;
@@ -135,6 +133,7 @@ namespace PaintingThreads {
 			this->btnPause->Text = L"pause";
 			this->btnPause->UseVisualStyleBackColor = true;
 			this->btnPause->Click += gcnew System::EventHandler(this, &Form1::btnPause_Click);
+			this->btnPause->Enabled = false;
 			// 
 			// btnStartPainting
 			// 
@@ -145,6 +144,7 @@ namespace PaintingThreads {
 			this->btnStartPainting->Text = L"start painting";
 			this->btnStartPainting->UseVisualStyleBackColor = true;
 			this->btnStartPainting->Click += gcnew System::EventHandler(this, &Form1::btnStartPainting_Click);
+			this->btnStartPainting->Enabled = false;
 			// 
 			// grpPaintOptions
 			// 
@@ -280,7 +280,7 @@ namespace PaintingThreads {
 					 // load image into picture box
 					 pictureBox->Image = Image::FromFile(openFile1->FileName);
 					 backgroundImage = ImageLoader::loadImage(Image::FromFile(openFile1->FileName)->Width,Image::FromFile(openFile1->FileName)->Height,3,HTWStringConverter::Sys2Std(openFile1->FileName));
-					 loadImageOk = 1;
+					 btnStartPainting->Enabled = true;
 				 }
 			 }
 
@@ -344,13 +344,10 @@ namespace PaintingThreads {
 
 			 // button startPainting
 	private: System::Void btnStartPainting_Click(System::Object^  sender, System::EventArgs^  e) {
-				if(!loadImageOk) {
-					System::Windows::Forms::MessageBox::Show("Bitte zuerst ein Bild laden");
-				} else {
-					startPaintingOk = 1;
-					paintingThr = gcnew System::Threading::Thread(gcnew ThreadStart(this,&Form1::paintThreadStart));
-					paintingThr->Start();
-				}
+				//startPaintingOk = 1;
+				btnPause->Enabled = true;
+				paintingThr = gcnew System::Threading::Thread(gcnew ThreadStart(this,&Form1::paintThreadStart));
+				paintingThr->Start();
 			 }
 
 	public: System::Void paintThreadStart() {
@@ -366,12 +363,8 @@ namespace PaintingThreads {
 
 			 // pause button to get a result picture
 	private: System::Void btnPause_Click(System::Object^  sender, System::EventArgs^  e) {
-				 if(!loadImageOk/* || !startPaintingOk*/) {
-					 System::Windows::Forms::MessageBox::Show("painting noch nicht gestartet");
-				 } else {
-					pauseThr = gcnew System::Threading::Thread(gcnew ThreadStart(this,&Form1::pauseThreadStart));
-					pauseThr->Start();
-				}
+				pauseThr = gcnew System::Threading::Thread(gcnew ThreadStart(this,&Form1::pauseThreadStart));
+				pauseThr->Start();
 			 }
 
 	public: System::Void pauseThreadStart() {
@@ -381,6 +374,7 @@ namespace PaintingThreads {
 				Thread::BeginCriticalRegion();
 				final = paintThread->getImageObject();
 				if(htwSaveImage(charName,final->getImageContent(),final->getWidth(), final->getHeight(),final->getBytesPerPixel())) {
+					delete pictureBox->Image;
 					pictureBox->Image = Image::FromFile(fileName);
 				} else System::Windows::Forms::MessageBox::Show("Fehler beim Speichern");
 				Thread::EndCriticalRegion();
