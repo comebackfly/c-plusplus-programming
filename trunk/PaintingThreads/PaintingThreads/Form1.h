@@ -93,6 +93,7 @@ namespace PaintingThreads {
 		void InitializeComponent(void)
 		{
 			this->grpCtrl = (gcnew System::Windows::Forms::GroupBox());
+			this->btnPause = (gcnew System::Windows::Forms::Button());
 			this->btnStartPainting = (gcnew System::Windows::Forms::Button());
 			this->grpPaintOptions = (gcnew System::Windows::Forms::GroupBox());
 			this->trbThreads = (gcnew System::Windows::Forms::TrackBar());
@@ -103,7 +104,6 @@ namespace PaintingThreads {
 			this->trbLoops = (gcnew System::Windows::Forms::TrackBar());
 			this->btnLoadImage = (gcnew System::Windows::Forms::Button());
 			this->pictureBox = (gcnew System::Windows::Forms::PictureBox());
-			this->btnPause = (gcnew System::Windows::Forms::Button());
 			this->openFile1 = (gcnew System::Windows::Forms::OpenFileDialog());
 			this->grpCtrl->SuspendLayout();
 			this->grpPaintOptions->SuspendLayout();
@@ -125,6 +125,16 @@ namespace PaintingThreads {
 			this->grpCtrl->TabIndex = 0;
 			this->grpCtrl->TabStop = false;
 			this->grpCtrl->Text = L"control";
+			// 
+			// btnPause
+			// 
+			this->btnPause->Location = System::Drawing::Point(93, 231);
+			this->btnPause->Name = L"btnPause";
+			this->btnPause->Size = System::Drawing::Size(45, 23);
+			this->btnPause->TabIndex = 9;
+			this->btnPause->Text = L"pause";
+			this->btnPause->UseVisualStyleBackColor = true;
+			this->btnPause->Click += gcnew System::EventHandler(this, &Form1::btnPause_Click);
 			// 
 			// btnStartPainting
 			// 
@@ -231,16 +241,6 @@ namespace PaintingThreads {
 			this->pictureBox->TabIndex = 1;
 			this->pictureBox->TabStop = false;
 			// 
-			// btnPause
-			// 
-			this->btnPause->Location = System::Drawing::Point(93, 231);
-			this->btnPause->Name = L"btnPause";
-			this->btnPause->Size = System::Drawing::Size(45, 23);
-			this->btnPause->TabIndex = 9;
-			this->btnPause->Text = L"pause";
-			this->btnPause->UseVisualStyleBackColor = true;
-			this->btnPause->Click += gcnew System::EventHandler(this, &Form1::btnPause_Click);
-			// 
 			// openFile1
 			// 
 			this->openFile1->FileName = L"file";
@@ -254,6 +254,7 @@ namespace PaintingThreads {
 			this->Controls->Add(this->grpCtrl);
 			this->Name = L"Form1";
 			this->Text = L"PaintingThreads";
+			this->FormClosing += gcnew System::Windows::Forms::FormClosingEventHandler(this, &Form1::Form1_FormClosing);
 			this->Load += gcnew System::EventHandler(this, &Form1::Form1_Load);
 			this->grpCtrl->ResumeLayout(false);
 			this->grpPaintOptions->ResumeLayout(false);
@@ -390,10 +391,25 @@ namespace PaintingThreads {
 
 			}
 
-	public: System::Void showFile() {
-			pictureBox->Image = Image::FromFile("C:\\Windows\\Temp\\temp.jpg");
-			}
-	};
+			// alle temp-Bilder loeschen
+	private: System::Void Form1_FormClosing(System::Object^  sender, System::Windows::Forms::FormClosingEventArgs^  e) {
+				 delete pictureBox->Image;
+				 for(int i=1;i<=nameId;i++) {
+					System::String^ fileName =  ("C:\\Windows\\Temp\\temp" + i + ".jpg");
+					if(System::IO::File::Exists(fileName)) {
+						System::IO::File::Delete(fileName);
+					}
+					
+					/* ZU TESTZWECKEN AUSKOMMENTIERT, DAMIT DAS FINAL BILD GESPEICHERT BLEIBT
+					
+					if(System::IO::File::Exists("C:\\Windows\\Temp\\tempFinal.jpg")) {
+						System::IO::File::Delete("C:\\Windows\\Temp\\tempFinal.jpg");
+					} 
+					
+					*/
+				}
+			 }
+};
 }
 
 
