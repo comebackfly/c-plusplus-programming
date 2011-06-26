@@ -36,6 +36,7 @@ namespace PaintingThreads {
 		static int startPaintingOk = 0;
 		ImageObject* backgroundImage;
 		ImageObject* final;
+		PaintThread^ paintThread;
 
 	public:
 		Form1(void)
@@ -347,15 +348,19 @@ namespace PaintingThreads {
 					startPaintingOk = 1;
 					paintingThr = gcnew System::Threading::Thread(gcnew ThreadStart(this,&Form1::paintThreadStart));
 					paintingThr->Start();
-					System::Windows::Forms::MessageBox::Show("Fertig");
+					//System::Windows::Forms::MessageBox::Show("Fertig");
 				}
 			 }
 
 	public: System::Void paintThreadStart() {
 				QuadrantManager* qMan = new QuadrantManager();
+				// PaintThread Objekt erzeugen
+				paintThread = gcnew PaintThread(backgroundImage, qMan,System::Convert::ToInt32(txtLoops->Text));
+				// gewuenschte Anzahl an Threads aus dem Object paintThreads erzeugen
 				for(int i=0; i<System::Convert::ToInt32(txtThreads->Text); i++){
 					// code zum starten der painting funktion
-					PaintThread^ paintThread = gcnew PaintThread(backgroundImage, qMan,System::Convert::ToInt32(txtLoops->Text));
+//					PaintThread^ paintThread = gcnew PaintThread(backgroundImage, qMan,System::Convert::ToInt32(txtLoops->Text));
+					paintThread->startThread();
 				}
 			//  if (paintingThr->IsAlive) paintingThr->Abort();
 			}
@@ -371,12 +376,17 @@ namespace PaintingThreads {
 			 }
 
 	public: System::Void pauseThreadStart() {
-				paintingThr->Sleep(4000);
-				final = backgroundImage;
+				//paintingThr->Sleep(4000);
+				Thread::BeginCriticalRegion();
+				final = paintThread->getImageObject();
 				if(htwSaveImage("C:\\Windows\\Temp\\temp.jpg",final->getImageContent(),final->getWidth(), final->getHeight(),final->getBytesPerPixel())) {
 					pictureBox->Image = Image::FromFile("C:\\Windows\\Temp\\temp.jpg");
-				} else System::Windows::Forms::MessageBox::Show("Fehler beim Speichern");		 
+				} else System::Windows::Forms::MessageBox::Show("Fehler beim Speichern");
+				Thread::EndCriticalRegion();
+
 			}
+
+	
 	};
 }
 
