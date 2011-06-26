@@ -21,6 +21,7 @@ namespace PaintingThreads {
 	using namespace System::Windows::Forms;
 	using namespace System::Data;
 	using namespace System::Drawing;
+	using namespace System::Runtime::InteropServices;
 
 	using namespace System;
 	using namespace System::Threading;
@@ -34,6 +35,7 @@ namespace PaintingThreads {
 		Thread^ pauseThr;
 		static int loadImageOk = 0;
 		static int startPaintingOk = 0;
+		static int nameId = 0;
 		ImageObject* backgroundImage;
 		ImageObject* final;
 		PaintThread^ paintThread;
@@ -376,17 +378,21 @@ namespace PaintingThreads {
 			 }
 
 	public: System::Void pauseThreadStart() {
-				//paintingThr->Sleep(4000);
+				nameId++;
+				System::String^ fileName = ("C:\\Windows\\Temp\\temp" + nameId + ".jpg");
+				const char* charName = (char*) Marshal::StringToHGlobalAnsi(fileName ).ToPointer();
 				Thread::BeginCriticalRegion();
 				final = paintThread->getImageObject();
-				if(htwSaveImage("C:\\Windows\\Temp\\temp.jpg",final->getImageContent(),final->getWidth(), final->getHeight(),final->getBytesPerPixel())) {
-					pictureBox->Image = Image::FromFile("C:\\Windows\\Temp\\temp.jpg");
+				if(htwSaveImage(charName,final->getImageContent(),final->getWidth(), final->getHeight(),final->getBytesPerPixel())) {
+					pictureBox->Image = Image::FromFile(fileName);
 				} else System::Windows::Forms::MessageBox::Show("Fehler beim Speichern");
 				Thread::EndCriticalRegion();
 
 			}
 
-	
+	public: System::Void showFile() {
+			pictureBox->Image = Image::FromFile("C:\\Windows\\Temp\\temp.jpg");
+			}
 	};
 }
 
