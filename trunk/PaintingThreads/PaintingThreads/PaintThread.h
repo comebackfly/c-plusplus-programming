@@ -40,10 +40,10 @@ public:
 		this->loops = loops;
 		this->imageObject=imageObject;
 		this->qMan=qMan;
-		this->startThread();
+//		this->startThread();
 	}
 
-	ImageObject* getImageObject() {
+	public : ImageObject* getImageObject() {
 		return this->imageObject;
 	}
 
@@ -166,12 +166,18 @@ public:
 				break;
 			}
 		} // end for
-				
+		System::Windows::Forms::MessageBox::Show("Fertig");
 		// end thread
 		if (newThread->IsAlive) {
-			//System::Windows::Forms::MessageBox::Show("Fertig" + newThread->GetHashCode());
 			newThread->Abort();
 		}
+	/*	if (mainform::paintingThr->IsAlive) {
+			mainform::paintingThr->Abort();
+		}
+		if (mainform::pauseThr->IsAlive) {
+			mainform::pauseThr->Abort();
+		}
+	*/
 	}
 
 	int generateIntegerNumber(int start, int end){
