@@ -295,12 +295,12 @@ namespace PaintingThreads {
 					 txtThreads->Text = "1";
 				 }
 				 else {
-					 // pruefen ob > 10 oder <0
+					 // pruefen ob > 100 oder <0
 					 if(System::Convert::ToInt32(txtThreads->Text)>100) {
-						 System::Windows::Forms::MessageBox::Show("Wert zwischen 1 und 10");
+						 System::Windows::Forms::MessageBox::Show("Wert zwischen 1 und 100");
 						 txtThreads->Text= "100";
 					 } else if(System::Convert::ToInt32(txtThreads->Text)<1) {
-						 System::Windows::Forms::MessageBox::Show("Wert zwischen 1 und 10");
+						 System::Windows::Forms::MessageBox::Show("Wert zwischen 1 und 100");
 						 txtThreads->Text= "1";
 					 } else {
 						 trbThreads->Value = System::Convert::ToInt32(txtThreads->Text);
@@ -404,11 +404,11 @@ namespace PaintingThreads {
 					
 					*/
 				}
-					if (paintingThr->IsAlive) {
-						paintingThr->Abort();
+					if (paintingThr) {
+						if (paintingThr->IsAlive) paintingThr->Abort();
 					}
-					if (pauseThr->IsAlive) {
-						pauseThr->Abort();
+					if (pauseThr) {
+						if (pauseThr->IsAlive) pauseThr->Abort();
 					}
 			 }
 };
