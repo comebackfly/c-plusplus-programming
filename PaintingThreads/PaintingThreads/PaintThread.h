@@ -57,7 +57,8 @@ public:
 			fillR = r / (255/alpha);
 			fillG = g / (255/alpha);
 			fillB = b / (255/alpha);
-			alphaOld = 255 / (255/alpha);
+			if((255 / (255/alpha)) < 1) alphaOld = 1;
+			else alphaOld = 255 / (255/alpha);
 		}
 		
 		int* pixel = new int[3];
@@ -95,7 +96,7 @@ public:
 			int r = generateIntegerNumber(0,255);
 			int g = generateIntegerNumber(10,200);
 			int b = generateIntegerNumber(50,100);
-			int alpha = generateIntegerNumber(0,100);
+			int alpha = generateIntegerNumber(1,100);
 			//System::Windows::Forms::MessageBox::Show(System::Convert::ToString(quadrantDecision) + " " + System::Convert::ToString(r));
 
 			int x0 = 0;

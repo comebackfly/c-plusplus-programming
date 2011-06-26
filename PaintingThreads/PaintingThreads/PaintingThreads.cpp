@@ -19,6 +19,9 @@ int main(array<System::String ^> ^args)
 	Console::WriteLine( "Main thread: Start a second thread." );
 
 	// Create the main window and run it
-	Application::Run(gcnew Form1());
+
+	Form1^ mainform = gcnew Form1();
+    Application::Run(mainform);
+
 	return 0;
 }

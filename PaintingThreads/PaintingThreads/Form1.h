@@ -30,13 +30,14 @@ namespace PaintingThreads {
 	/// </summary>
 	public ref class Form1 : public System::Windows::Forms::Form
 	{
-	public:
+		Thread^ paintingThr;
+		Thread^ pauseThr;
 		static int loadImageOk = 0;
 		static int startPaintingOk = 0;
 		ImageObject* backgroundImage;
 		ImageObject* final;
-		//PaintThread^ paintThread;
 
+	public:
 		Form1(void)
 		{
 			InitializeComponent();
@@ -110,7 +111,8 @@ namespace PaintingThreads {
 			// 
 			// grpCtrl
 			// 
-			this->grpCtrl->BackColor = System::Drawing::Color::White;
+			this->grpCtrl->BackColor = System::Drawing::Color::Transparent;
+			this->grpCtrl->Controls->Add(this->btnPause);
 			this->grpCtrl->Controls->Add(this->btnStartPainting);
 			this->grpCtrl->Controls->Add(this->grpPaintOptions);
 			this->grpCtrl->Controls->Add(this->btnLoadImage);
@@ -225,11 +227,10 @@ namespace PaintingThreads {
 			this->pictureBox->SizeMode = System::Windows::Forms::PictureBoxSizeMode::StretchImage;
 			this->pictureBox->TabIndex = 1;
 			this->pictureBox->TabStop = false;
-			this->pictureBox->Click += gcnew System::EventHandler(this, &Form1::pictureBox_Click);
 			// 
 			// btnPause
 			// 
-			this->btnPause->Location = System::Drawing::Point(106, 284);
+			this->btnPause->Location = System::Drawing::Point(93, 231);
 			this->btnPause->Name = L"btnPause";
 			this->btnPause->Size = System::Drawing::Size(45, 23);
 			this->btnPause->TabIndex = 9;
@@ -246,7 +247,6 @@ namespace PaintingThreads {
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->ClientSize = System::Drawing::Size(818, 503);
-			this->Controls->Add(this->btnPause);
 			this->Controls->Add(this->pictureBox);
 			this->Controls->Add(this->grpCtrl);
 			this->Name = L"Form1";
@@ -340,34 +340,43 @@ namespace PaintingThreads {
 
 			 // button startPainting
 	private: System::Void btnStartPainting_Click(System::Object^  sender, System::EventArgs^  e) {
-
-				 if(!loadImageOk) {
-					 System::Windows::Forms::MessageBox::Show("Bitte zuerst ein Bild laden");
-				 } else {
-					 QuadrantManager* qMan = new QuadrantManager();
-					 for(int i=0; i<System::Convert::ToInt32(txtThreads->Text); i++){
-						 // code zum starten der painting funktion
-						  PaintThread^ paintThread = gcnew PaintThread(backgroundImage, qMan,System::Convert::ToInt32(txtLoops->Text));
-						  }
-					 }
-
-				startPaintingOk = 1;
-				 
+				if(!loadImageOk) {
+					System::Windows::Forms::MessageBox::Show("Bitte zuerst ein Bild laden");
+					if (paintingThr->IsAlive) paintingThr->Abort();
+				} else {
+					startPaintingOk = 1;
+					paintingThr = gcnew System::Threading::Thread(gcnew ThreadStart(this,&Form1::paintThreadStart));
+					paintingThr->Start();
+					System::Windows::Forms::MessageBox::Show("Fertig");
+				}
 			 }
 
+	public: System::Void paintThreadStart() {
+				QuadrantManager* qMan = new QuadrantManager();
+				for(int i=0; i<System::Convert::ToInt32(txtThreads->Text); i++){
+					// code zum starten der painting funktion
+					PaintThread^ paintThread = gcnew PaintThread(backgroundImage, qMan,System::Convert::ToInt32(txtLoops->Text));
+				}
+			//  if (paintingThr->IsAlive) paintingThr->Abort();
+			}
 
-	private: System::Void pictureBox_Click(System::Object^  sender, System::EventArgs^  e) {
-			 }
 			 // pause button to get a result picture
 	private: System::Void btnPause_Click(System::Object^  sender, System::EventArgs^  e) {
-				 if(!loadImageOk || !startPaintingOk) {
+				 if(!loadImageOk/* || !startPaintingOk*/) {
 					 System::Windows::Forms::MessageBox::Show("painting noch nicht gestartet");
 				 } else {
-					 if(htwSaveImage("C:\\Windows\\Temp\\temp.jpg",backgroundImage->getImageContent(),backgroundImage->getWidth(), backgroundImage->getHeight(),backgroundImage->getBytesPerPixel())) {
-						pictureBox->Image = Image::FromFile("C:\\Windows\\Temp\\temp.jpg");
-					 }		
-				 }
+					pauseThr = gcnew System::Threading::Thread(gcnew ThreadStart(this,&Form1::pauseThreadStart));
+					pauseThr->Start();
+				}
 			 }
+
+	public: System::Void pauseThreadStart() {
+				paintingThr->Sleep(4000);
+				final = backgroundImage;
+				if(htwSaveImage("C:\\Windows\\Temp\\temp.jpg",final->getImageContent(),final->getWidth(), final->getHeight(),final->getBytesPerPixel())) {
+					pictureBox->Image = Image::FromFile("C:\\Windows\\Temp\\temp.jpg");
+				} else System::Windows::Forms::MessageBox::Show("Fehler beim Speichern");		 
+			}
 	};
 }
 
