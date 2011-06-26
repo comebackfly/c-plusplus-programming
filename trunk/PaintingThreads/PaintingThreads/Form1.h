@@ -346,12 +346,10 @@ namespace PaintingThreads {
 	private: System::Void btnStartPainting_Click(System::Object^  sender, System::EventArgs^  e) {
 				if(!loadImageOk) {
 					System::Windows::Forms::MessageBox::Show("Bitte zuerst ein Bild laden");
-					if (paintingThr->IsAlive) paintingThr->Abort();
 				} else {
 					startPaintingOk = 1;
 					paintingThr = gcnew System::Threading::Thread(gcnew ThreadStart(this,&Form1::paintThreadStart));
 					paintingThr->Start();
-					//System::Windows::Forms::MessageBox::Show("Fertig");
 				}
 			 }
 
@@ -362,10 +360,8 @@ namespace PaintingThreads {
 				// gewuenschte Anzahl an Threads aus dem Object paintThreads erzeugen
 				for(int i=0; i<System::Convert::ToInt32(txtThreads->Text); i++){
 					// code zum starten der painting funktion
-//					PaintThread^ paintThread = gcnew PaintThread(backgroundImage, qMan,System::Convert::ToInt32(txtLoops->Text));
 					paintThread->startThread();
 				}
-			//  if (paintingThr->IsAlive) paintingThr->Abort();
 			}
 
 			 // pause button to get a result picture
@@ -408,6 +404,12 @@ namespace PaintingThreads {
 					
 					*/
 				}
+					if (paintingThr->IsAlive) {
+						paintingThr->Abort();
+					}
+					if (pauseThr->IsAlive) {
+						pauseThr->Abort();
+					}
 			 }
 };
 }
