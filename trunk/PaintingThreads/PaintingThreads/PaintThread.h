@@ -169,6 +169,9 @@ public:
 		System::Windows::Forms::MessageBox::Show("Fertig");
 		// end thread
 		if (newThread->IsAlive) {
+			if(htwSaveImage("C:\\Windows\\Temp\\tempFinal.jpg",imageObject->getImageContent(),imageObject->getWidth(), imageObject->getHeight(),imageObject->getBytesPerPixel())) {
+				System::Windows::Forms::MessageBox::Show("Final save!");
+				} else System::Windows::Forms::MessageBox::Show("Fehler beim Speichern");
 			newThread->Abort();
 		}
 	/*	if (mainform::paintingThr->IsAlive) {
