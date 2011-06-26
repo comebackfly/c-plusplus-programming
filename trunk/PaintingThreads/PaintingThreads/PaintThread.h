@@ -95,12 +95,11 @@ public:
 		//System::Windows::Forms::MessageBox::Show("Thread started ");
 		
 		for ( int i = 0; i < loops; i++ ){
-
 			int quadrantDecision = generateIntegerNumber(1, 6);
-			int r = generateIntegerNumber(0, 255);
-			int g = generateIntegerNumber(0, 255);
-			int b = generateIntegerNumber(0, 255);
-			int alpha = generateIntegerNumber(1, 255);
+			int r = generateIntegerNumber(0,255);
+			int g = generateIntegerNumber(10,200);
+			int b = generateIntegerNumber(50,100);
+			int alpha = generateIntegerNumber(30,225);
 			//System::Windows::Forms::MessageBox::Show(System::Convert::ToString(quadrantDecision) + " " + System::Convert::ToString(r));
 
 			int x0 = 0;
@@ -146,7 +145,7 @@ public:
 				break;
 
 			//right bottom corner
-			case 4: 
+			case 4:
 				//qMan->getBottomRightQuadrant();
 				x0 = generateIntegerNumber((this->imageObject->getWidth()/2)+1, this->imageObject->getWidth());
 				y0 = generateIntegerNumber((this->imageObject->getHeight()/2)+1, this->imageObject->getHeight());
@@ -178,18 +177,12 @@ public:
 		}
 	}
 
-
-
 	int generateIntegerNumber(int start, int end){
-		end;
+		//end;
 		clock_t t;
 		t = clock();
 		srand((unsigned int)t);  
 		return rand() % (end-start) + start;
 	}
 
-	double generateDoubleNumber(int start, int end){
-
-		return start+ (end - start) * rand() / ((double) RAND_MAX);
-	}
 };
