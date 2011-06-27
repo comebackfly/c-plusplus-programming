@@ -58,10 +58,8 @@ public : ImageObject* getImageObject() {
 			 return this->imageObject;
 		 }
 
-		 void drawRectangle(int x0, int y0, int x1, int y1, int r, int g, int b, int alpha, int num){
+		 void drawRectangle(int x0, int y0, int x1, int y1, int r, int g, int b, int alpha){
 			 //with ALPHA VALUE IMPLEMENTATION
-
-			 System::Windows::Forms::MessageBox::Show("drawing "+num);
 
 			 int fillR=r;
 			 int fillG=g;
@@ -140,7 +138,7 @@ public : ImageObject* getImageObject() {
 					 x1 = generateIntegerNumber(x0, (this->imageObject->getWidth()/2)-1);
 					 y1 = generateIntegerNumber(y0, this->imageObject->getHeight()/2);
 
-					 drawRectangle(x0, y0, x1, y1, r, g, b, alpha, number);
+					 drawRectangle(x0, y0, x1, y1, r, g, b, alpha);
 					 topLeftQuadrant->ReleaseMutex();
 					 break;
 
@@ -152,7 +150,7 @@ public : ImageObject* getImageObject() {
 					 x1 = generateIntegerNumber(x0, this->imageObject->getWidth());
 					 y1 = generateIntegerNumber(y0, this->imageObject->getHeight()/2);
 
-					 drawRectangle(x0, y0, x1, y1, r, g, b, alpha, number);
+					 drawRectangle(x0, y0, x1, y1, r, g, b, alpha);
 					 topRightQuadrant->ReleaseMutex();
 					 break;
 
@@ -164,7 +162,7 @@ public : ImageObject* getImageObject() {
 					 x1 = generateIntegerNumber(x0, (this->imageObject->getWidth()/2)-1);
 					 y1 = generateIntegerNumber(y0, this->imageObject->getHeight());
 
-					 drawRectangle(x0, y0, x1, y1, r, g, b, alpha, number);
+					 drawRectangle(x0, y0, x1, y1, r, g, b, alpha);
 					 bottomLeftQuadrant->ReleaseMutex();
 					 break;
 
@@ -176,7 +174,7 @@ public : ImageObject* getImageObject() {
 					 x1 = generateIntegerNumber(x0, this->imageObject->getWidth());
 					 y1 = generateIntegerNumber(y0, this->imageObject->getHeight());
 
-					 drawRectangle(x0, y0, x1, y1, r, g, b, alpha, number);
+					 drawRectangle(x0, y0, x1, y1, r, g, b, alpha);
 					 bottomRightQuadrant->ReleaseMutex();
 					 break;
 
@@ -188,7 +186,7 @@ public : ImageObject* getImageObject() {
 					 x1 = generateIntegerNumber((this->imageObject->getWidth()/2)+1, this->imageObject->getWidth()-this->imageObject->getWidth()/4);
 					 y1 = generateIntegerNumber((this->imageObject->getHeight()/2)+1, this->imageObject->getHeight()-this->imageObject->getHeight()/4);
 
-					 drawRectangle(x0, y0, x1, y1, r, g, b, alpha, number);
+					 drawRectangle(x0, y0, x1, y1, r, g, b, alpha);
 					 overall->ReleaseMutex();
 					 break;
 				 }
