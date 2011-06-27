@@ -21,9 +21,9 @@ public:
 	void setPixelValue(int index, int* values);
 	int* addPixelValues(int* pixelOne, int* pixelTwo );
 	void ImageObject::deletePixelValue(int index);
-
-private:
 	unsigned char *imageContent;
+private:
+	
 	int width;
 	int height;
 	int bpp;

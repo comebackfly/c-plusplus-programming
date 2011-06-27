@@ -49,10 +49,9 @@ public:
 
 	}
 
-	PaintThread(ImageObject* imageObject, QuadrantManage^ qMan, int loops){
+	PaintThread(ImageObject* imageObject, int loops){
 		this->loops = loops;
 		this->imageObject=imageObject;
-		this->qMan=qMan;
 
 		topLeftQuadrant = gcnew Mutex;
 		topRightQuadrant = gcnew Mutex;
@@ -81,27 +80,36 @@ public : ImageObject* getImageObject() {
 				 else alphaOld = 255 / (255/alpha);
 			 }
 
-			 int* pixel = new int[3];
+			 int pixel[3];
 			 pixel[0]=b;
 			 pixel[1]=g;
 			 pixel[2]=r;
 
 			 for(int i=(y0*imageObject->getWidth()*imageObject->getBytesPerPixel()); i < (y1*imageObject->getWidth()*imageObject->getBytesPerPixel()); i+=imageObject->getWidth()*imageObject->getBytesPerPixel()){
 				 for(int j=i+(x0*imageObject->getBytesPerPixel()); j < i+(x1*imageObject->getBytesPerPixel()); j+=imageObject->getBytesPerPixel()){
-					 int* oldPixel = new int[3];
-					 oldPixel = this->imageObject->getPixelValue(j);
-					 pixel[0] = (oldPixel[0] / alphaOld + fillB) > 255 ? 255 : (oldPixel[0] / alphaOld + fillB);
-					 pixel[1] = (oldPixel[1] / alphaOld + fillG) > 255 ? 255 : (oldPixel[1] / alphaOld + fillG);
-					 pixel[2] = (oldPixel[2] / alphaOld + fillR) > 255 ? 255 : (oldPixel[2] / alphaOld + fillR);
-					 this->imageObject->setPixelValue(j, pixel);
-					 delete oldPixel;
+					 //int* oldPixel = new int[3];
+					 int oldPixelB =  this->imageObject->imageContent[j];
+					 int oldPixelG = this->imageObject->imageContent[j+1];
+					 int oldPixelR = this->imageObject->imageContent[j+2];
+					 //oldPixel = this->imageObject->getPixelValue(j);
+					 pixel[0] = (oldPixelB / alphaOld + fillB) > 255 ? 255 : (oldPixelB / alphaOld + fillB);
+					 pixel[1] = (oldPixelG / alphaOld + fillG) > 255 ? 255 : (oldPixelG / alphaOld + fillG);
+					 pixel[2] = (oldPixelR / alphaOld + fillR) > 255 ? 255 : (oldPixelR / alphaOld + fillR);
+					// this->imageObject->setPixelValue(j, pixel);
+					 this->imageObject->imageContent[j] = pixel[0];
+					 this->imageObject->imageContent[j+1] = pixel[1];
+					 this->imageObject->imageContent[j+2] = pixel[2];
+					 //delete[] oldPixel;
 				 }
 			 }
-			 delete pixel;
+			 //delete[] pixel;
 		 }
 
 		 //entry point for thread
 		 void startThread(int i){
+			 clock_t t;
+			 t = clock();
+			 srand((unsigned int)t);  
 			 newThread = gcnew Thread(gcnew ParameterizedThreadStart(this, &PaintThread::drawing));
 			 newThread->Start(i);
 		 }
@@ -195,6 +203,7 @@ public : ImageObject* getImageObject() {
 				 }
 			 }
 			 System::Windows::Forms::MessageBox::Show("Thread "+num+" fertig");
+			 delete num;
 			 // end thread
 			 if (newThread->IsAlive) {
 				 newThread->Abort();
@@ -203,10 +212,6 @@ public : ImageObject* getImageObject() {
 
 		 //generates random number, but sometimes it's not realistic
 		 int generateIntegerNumber(int start, int end){
-			 //end;
-			 clock_t t;
-			 t = clock();
-			 srand((unsigned int)t);  
 			 return rand() % (end-start) + start;
 		 }
 };

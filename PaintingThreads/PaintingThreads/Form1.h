@@ -352,9 +352,8 @@ namespace PaintingThreads {
 			 }
 
 	public: System::Void paintThreadStart() {
-				QuadrantManage^ qMan = gcnew QuadrantManage();
 				// PaintThread Objekt erzeugen
-				paintThread = gcnew PaintThread(backgroundImage, qMan, System::Convert::ToInt32(txtLoops->Text));
+				paintThread = gcnew PaintThread(backgroundImage, System::Convert::ToInt32(txtLoops->Text));
 				// gewuenschte Anzahl an Threads aus dem Object paintThreads erzeugen
 				for(int i=0; i<System::Convert::ToInt32(txtThreads->Text); i++){
 					// code zum starten der painting funktion
@@ -373,14 +372,11 @@ namespace PaintingThreads {
 				nameId++;
 				System::String^ fileName = ("C:\\Windows\\Temp\\temp" + nameId + ".jpg");
 				const char* charName = (char*) Marshal::StringToHGlobalAnsi(fileName ).ToPointer();
-				Thread::BeginCriticalRegion();
 				final = paintThread->getImageObject();
 				if(htwSaveImage(charName,final->getImageContent(),final->getWidth(), final->getHeight(),final->getBytesPerPixel())) {
 					delete pictureBox->Image;
 					pictureBox->Image = Image::FromFile(fileName);
 				} else System::Windows::Forms::MessageBox::Show("Fehler beim Speichern");
-				Thread::EndCriticalRegion();
-
 			}
 
 			// alle temp-Bilder loeschen
@@ -392,13 +388,6 @@ namespace PaintingThreads {
 						 System::IO::File::Delete(fileName);
 					 }
 
-					 /* ZU TESTZWECKEN AUSKOMMENTIERT, DAMIT DAS FINAL BILD GESPEICHERT BLEIBT
-
-					 if(System::IO::File::Exists("C:\\Windows\\Temp\\tempFinal.jpg")) {
-					 System::IO::File::Delete("C:\\Windows\\Temp\\tempFinal.jpg");
-					 } 
-
-					 */
 				 }
 				 if (paintingThr) {
 					 if (paintingThr->IsAlive) paintingThr->Abort();
