@@ -344,27 +344,33 @@ namespace PaintingThreads {
 
 			 // button startPainting
 	private: System::Void btnStartPainting_Click(System::Object^  sender, System::EventArgs^  e) {
-				//startPaintingOk = 1;
-				btnPause->Enabled = true;
-				paintingThr = gcnew System::Threading::Thread(gcnew ThreadStart(this,&Form1::paintThreadStart));
-				paintingThr->Start();
+
+				 //startPaintingOk = 1;
+				 btnPause->Enabled = true;
+				 paintingThr = gcnew System::Threading::Thread(gcnew ThreadStart(this,&Form1::paintThreadStart));
+				 paintingThr->Start();
 			 }
 
 	public: System::Void paintThreadStart() {
-				QuadrantManager* qMan = new QuadrantManager();
+				QuadrantManage^ qMan = gcnew QuadrantManage();
 				// PaintThread Objekt erzeugen
-				paintThread = gcnew PaintThread(backgroundImage, qMan,System::Convert::ToInt32(txtLoops->Text));
+				paintThread = gcnew PaintThread(backgroundImage, qMan, System::Convert::ToInt32(txtLoops->Text));
 				// gewuenschte Anzahl an Threads aus dem Object paintThreads erzeugen
 				for(int i=0; i<System::Convert::ToInt32(txtThreads->Text); i++){
 					// code zum starten der painting funktion
-					paintThread->startThread();
+					paintThread->startThread(i);
 				}
+
+				 if(htwSaveImage("C:\\Windows\\Temp\\tempFinal.jpg",backgroundImage->getImageContent(),backgroundImage->getWidth(), backgroundImage->getHeight(),backgroundImage->getBytesPerPixel())) {
+					 System::Windows::Forms::MessageBox::Show("Final save!");
+				 } else System::Windows::Forms::MessageBox::Show("Fehler beim Speichern");
+				 
 			}
 
-			 // pause button to get a result picture
+			// pause button to get a result picture
 	private: System::Void btnPause_Click(System::Object^  sender, System::EventArgs^  e) {
-				pauseThr = gcnew System::Threading::Thread(gcnew ThreadStart(this,&Form1::pauseThreadStart));
-				pauseThr->Start();
+				 pauseThr = gcnew System::Threading::Thread(gcnew ThreadStart(this,&Form1::pauseThreadStart));
+				 pauseThr->Start();
 			 }
 
 	public: System::Void pauseThreadStart() {
@@ -385,27 +391,25 @@ namespace PaintingThreads {
 	private: System::Void Form1_FormClosing(System::Object^  sender, System::Windows::Forms::FormClosingEventArgs^  e) {
 				 delete pictureBox->Image;
 				 for(int i=1;i<=nameId;i++) {
-					System::String^ fileName =  ("C:\\Windows\\Temp\\temp" + i + ".jpg");
-					if(System::IO::File::Exists(fileName)) {
-						System::IO::File::Delete(fileName);
-					}
-					
-					/* ZU TESTZWECKEN AUSKOMMENTIERT, DAMIT DAS FINAL BILD GESPEICHERT BLEIBT
-					
-					if(System::IO::File::Exists("C:\\Windows\\Temp\\tempFinal.jpg")) {
-						System::IO::File::Delete("C:\\Windows\\Temp\\tempFinal.jpg");
-					} 
-					
-					*/
-				}
-					if (paintingThr) {
-						if (paintingThr->IsAlive) paintingThr->Abort();
-					}
-					if (pauseThr) {
-						if (pauseThr->IsAlive) pauseThr->Abort();
-					}
+					 System::String^ fileName =  ("C:\\Windows\\Temp\\temp" + i + ".jpg");
+					 if(System::IO::File::Exists(fileName)) {
+						 System::IO::File::Delete(fileName);
+					 }
+
+					 /* ZU TESTZWECKEN AUSKOMMENTIERT, DAMIT DAS FINAL BILD GESPEICHERT BLEIBT
+
+					 if(System::IO::File::Exists("C:\\Windows\\Temp\\tempFinal.jpg")) {
+					 System::IO::File::Delete("C:\\Windows\\Temp\\tempFinal.jpg");
+					 } 
+
+					 */
+				 }
+				 if (paintingThr) {
+					 if (paintingThr->IsAlive) paintingThr->Abort();
+				 }
+				 if (pauseThr) {
+					 if (pauseThr->IsAlive) pauseThr->Abort();
+				 }
 			 }
-};
+	};
 }
-
-

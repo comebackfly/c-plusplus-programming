@@ -16,8 +16,6 @@ int main(array<System::String ^> ^args)
 	Application::EnableVisualStyles();
 	Application::SetCompatibleTextRenderingDefault(false); 
 
-	Console::WriteLine( "Main thread: Start a second thread." );
-
 	// Create the main window and run it
 
 	Form1^ mainform = gcnew Form1();
