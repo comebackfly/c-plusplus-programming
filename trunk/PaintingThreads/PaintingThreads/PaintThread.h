@@ -14,6 +14,12 @@ using namespace System;
 using namespace System::Threading;
 
 
+///////////////////////////////////////////////////////////////////////////////
+/// This class holds the drawing algorithm
+///////////////////////////////////////////////////////////////////////////////
+
+
+
 public ref class PaintThread
 {
 
@@ -23,6 +29,7 @@ private:
 	Thread^ newThread;
 	QuadrantManage^ qMan;
 
+	//exlusive lock-objects for the quadrants
 	static Mutex^ topLeftQuadrant;
 	static Mutex^ topRightQuadrant;
 	static Mutex^ bottomLeftQuadrant;
@@ -58,9 +65,10 @@ public : ImageObject* getImageObject() {
 			 return this->imageObject;
 		 }
 
+		 //draws a rectangle with given parameters
 		 void drawRectangle(int x0, int y0, int x1, int y1, int r, int g, int b, int alpha){
-			 //with ALPHA VALUE IMPLEMENTATION
-
+			 
+			 //calculates alpha-value
 			 int fillR=r;
 			 int fillG=g;
 			 int fillB=b;
@@ -86,35 +94,30 @@ public : ImageObject* getImageObject() {
 					 pixel[1] = (oldPixel[1] / alphaOld + fillG) > 255 ? 255 : (oldPixel[1] / alphaOld + fillG);
 					 pixel[2] = (oldPixel[2] / alphaOld + fillR) > 255 ? 255 : (oldPixel[2] / alphaOld + fillR);
 					 this->imageObject->setPixelValue(j, pixel);
-					 //delete oldPixel;
+					 delete oldPixel;
 				 }
 			 }
-			 //delete pixel;
-			 //System::Windows::Forms::MessageBox::Show(System::Convert::ToString(counterY) + " " + System::Convert::ToString(counterX) + " x= " + System::Convert::ToString(x0) + " " + System::Convert::ToString(x1) + " y= " + System::Convert::ToString(y0) + " " + System::Convert::ToString(y1));
+			 delete pixel;
 		 }
 
+		 //entry point for thread
 		 void startThread(int i){
-			 //PaintThread^ paintThread = gcnew PaintThread(imageObject, qMan);
 			 newThread = gcnew Thread(gcnew ParameterizedThreadStart(this, &PaintThread::drawing));
 			 newThread->Start(i);
-
-			 //Thread::Sleep( 500 );
 		 }
 
+		 //decides in which quadrant will be drawn
 		 void drawing(Object^ num){
 
-			 System::Windows::Forms::MessageBox::Show("Thread started "+num);
-
-			 int number=System::Convert::ToInt32(num);
-
 			 for ( int i = 0; i < loops; i++ ){
-				 //int quadrantDecision = generateIntegerNumber(1, 6);
-				 int quadrantDecision=1;
+
+				 //generates random parameters
+				 int quadrantDecision = generateIntegerNumber(1, 6);
+				 //int quadrantDecision=1;
 				 int r = generateIntegerNumber(0,255);
 				 int g = generateIntegerNumber(10,200);
 				 int b = generateIntegerNumber(50,100);
 				 int alpha = generateIntegerNumber(1,100);
-				 //System::Windows::Forms::MessageBox::Show(System::Convert::ToString(quadrantDecision) + " " + System::Convert::ToString(r));
 
 				 int x0 = 0;
 				 int y0 = 0;
@@ -131,7 +134,7 @@ public : ImageObject* getImageObject() {
 
 					 /*if(number==1){
 
-						 Thread::Sleep( 1000 );
+					 Thread::Sleep( 1000 );
 					 }*/
 					 x0 = generateIntegerNumber(0, (this->imageObject->getWidth()/2)-1);
 					 y0 = generateIntegerNumber(1, (this->imageObject->getHeight()/2)-1);
@@ -190,24 +193,15 @@ public : ImageObject* getImageObject() {
 					 overall->ReleaseMutex();
 					 break;
 				 }
-			 } // end for
+			 }
 			 System::Windows::Forms::MessageBox::Show("Thread "+num+" fertig");
 			 // end thread
 			 if (newThread->IsAlive) {
-				 //if(htwSaveImage("C:\\Windows\\Temp\\tempFinal.jpg",imageObject->getImageContent(),imageObject->getWidth(), imageObject->getHeight(),imageObject->getBytesPerPixel())) {
-				 //	 System::Windows::Forms::MessageBox::Show("Final save!");
-				 //} else System::Windows::Forms::MessageBox::Show("Fehler beim Speichern");
 				 newThread->Abort();
 			 }
-			 /*	if (mainform::paintingThr->IsAlive) {
-			 mainform::paintingThr->Abort();
-			 }
-			 if (mainform::pauseThr->IsAlive) {
-			 mainform::pauseThr->Abort();
-			 }
-			 */
 		 }
 
+		 //generates random number, but sometimes it's not realistic
 		 int generateIntegerNumber(int start, int end){
 			 //end;
 			 clock_t t;
@@ -215,5 +209,4 @@ public : ImageObject* getImageObject() {
 			 srand((unsigned int)t);  
 			 return rand() % (end-start) + start;
 		 }
-
 };
