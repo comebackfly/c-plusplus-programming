@@ -361,10 +361,6 @@ namespace PaintingThreads {
 					paintThread->startThread(i);
 				}
 
-				 if(htwSaveImage("C:\\Windows\\Temp\\tempFinal.jpg",backgroundImage->getImageContent(),backgroundImage->getWidth(), backgroundImage->getHeight(),backgroundImage->getBytesPerPixel())) {
-					 System::Windows::Forms::MessageBox::Show("Final save!");
-				 } else System::Windows::Forms::MessageBox::Show("Fehler beim Speichern");
-				 
 			}
 
 			// pause button to get a result picture
