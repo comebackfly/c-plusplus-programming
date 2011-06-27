@@ -113,7 +113,6 @@ namespace PaintingThreads {
 			// grpCtrl
 			// 
 			this->grpCtrl->BackColor = System::Drawing::Color::Transparent;
-			this->grpCtrl->Controls->Add(this->btnPause);
 			this->grpCtrl->Controls->Add(this->btnStartPainting);
 			this->grpCtrl->Controls->Add(this->grpPaintOptions);
 			this->grpCtrl->Controls->Add(this->btnLoadImage);
@@ -126,25 +125,25 @@ namespace PaintingThreads {
 			// 
 			// btnPause
 			// 
-			this->btnPause->Location = System::Drawing::Point(93, 231);
+			this->btnPause->Enabled = false;
+			this->btnPause->Location = System::Drawing::Point(52, 283);
 			this->btnPause->Name = L"btnPause";
-			this->btnPause->Size = System::Drawing::Size(45, 23);
+			this->btnPause->Size = System::Drawing::Size(63, 23);
 			this->btnPause->TabIndex = 9;
-			this->btnPause->Text = L"pause";
+			this->btnPause->Text = L"snapShot";
 			this->btnPause->UseVisualStyleBackColor = true;
 			this->btnPause->Click += gcnew System::EventHandler(this, &Form1::btnPause_Click);
-			this->btnPause->Enabled = false;
 			// 
 			// btnStartPainting
 			// 
-			this->btnStartPainting->Location = System::Drawing::Point(6, 231);
+			this->btnStartPainting->Enabled = false;
+			this->btnStartPainting->Location = System::Drawing::Point(31, 231);
 			this->btnStartPainting->Name = L"btnStartPainting";
 			this->btnStartPainting->Size = System::Drawing::Size(81, 23);
 			this->btnStartPainting->TabIndex = 8;
 			this->btnStartPainting->Text = L"start painting";
 			this->btnStartPainting->UseVisualStyleBackColor = true;
 			this->btnStartPainting->Click += gcnew System::EventHandler(this, &Form1::btnStartPainting_Click);
-			this->btnStartPainting->Enabled = false;
 			// 
 			// grpPaintOptions
 			// 
@@ -250,6 +249,7 @@ namespace PaintingThreads {
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->ClientSize = System::Drawing::Size(818, 503);
+			this->Controls->Add(this->btnPause);
 			this->Controls->Add(this->pictureBox);
 			this->Controls->Add(this->grpCtrl);
 			this->Name = L"Form1";
