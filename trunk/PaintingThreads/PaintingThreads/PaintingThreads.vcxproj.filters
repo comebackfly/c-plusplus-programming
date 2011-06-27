@@ -37,9 +37,6 @@
     <ClCompile Include="ImageLoader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="QuadrantManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Form1.h">
@@ -69,7 +66,7 @@
     <ClInclude Include="LockClasses.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="QuadrantManager.h">
+    <ClInclude Include="QuadrantManage.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
