@@ -188,7 +188,7 @@ public : ImageObject* getImageObject() {
 					 drawRectangle(x0, y0, x1, y1, r, g, b, alpha);
 					 bottomRightQuadrant->ReleaseMutex();
 					 break;
-
+					  
 					 //overall
 				 case 5: 
 					 overall->WaitOne();
