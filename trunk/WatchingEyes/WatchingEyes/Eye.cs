@@ -17,29 +17,39 @@ namespace WatchingEyes
         private Pupil pupil;
         private Graphics g;
 
-        public Eye(int positionX, int positionY, int size, Pupil pupil)
+        public Eye(int positionX, int positionY, int size)
         {
             this.positionX = positionX;
             this.positionY = positionY;
             this.size=size;
-            this.pupil = pupil;
         }
 
-        public void paintEye(Graphics g)
+        public void paintEye(Graphics g, int clientWidth, int clientHeight)
         {
             this.g = g;
             // Create a new pen that we shall use for drawing the line
-            Pen myPen = new Pen(Color.Black);
-            //MessageBox.Show(""+this.positionX+" "+this.positionY+" "+this.size);
+            Pen blackPen = new Pen(Color.Black);
+            this.positionX = clientWidth;
+            this.positionY = clientHeight;
 
-            g.DrawEllipse(myPen, this.positionX, this.positionY, this.size, this.size/2);
+            g.DrawEllipse(blackPen, clientWidth, clientHeight, this.size, this.size / 2);
+            blackPen.Dispose();
 
-            pupil.paintPupil(g);
+            pupil.paintPupil(g, clientWidth+12, clientHeight+7);
+        }
+
+        public void updatePupil(Graphics g, int clientWidth, int clientHeight)
+        {
+            this.pupil.updatePupil(this.g, clientWidth, clientHeight);
         }
 
         public void close()
         {
+            //MessageBox.Show("" + this.positionX + " " + this.positionY + " " + this.size);
             this.pupil.setUnvisible();
+            SolidBrush invisible = new SolidBrush(Color.Black);
+            //this.g.FillEllipse(invisible, this.positionX, this.positionY, this.size, this.size/2);
+            invisible.Dispose();
 
         }
 
@@ -55,13 +65,17 @@ namespace WatchingEyes
 
         public int getWidth()
         {
-
             return this.size;
         }
 
         public Pupil getPupil()
         {
             return this.pupil;
+        }
+
+        public void setPupil(Pupil pupil)
+        {
+            this.pupil = pupil;
         }
     }
 }

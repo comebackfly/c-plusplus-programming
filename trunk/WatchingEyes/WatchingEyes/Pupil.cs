@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Drawing;
+using System.Windows.Forms;
 
 namespace WatchingEyes
 {
@@ -14,39 +15,32 @@ namespace WatchingEyes
         private Graphics g;
         private SolidBrush pupilBrush;
 
-        public Pupil()
+        public Pupil(int positionX, int positionY, int size)
         {
-            pupilBrush = new SolidBrush(Color.LawnGreen);
-        }
-
-        public void setPupil(int positionX, int positionY, int size)
-        {
+            this.size = size;
             this.positionX = positionX;
             this.positionY = positionY;
-            this.size=size;
+            pupilBrush = new SolidBrush(Color.Blue);
         }
 
-        public void paintPupil(Graphics g){
+        public void paintPupil(Graphics g, int clientWidth, int clientHeight){
             this.g = g;
             // Create a new pen that we shall use for drawing the line
-            
-            //MessageBox.Show(""+this.positionX+" "+this.positionY+" "+this.size);
-            if (this.positionX != 0)
-            {
-                g.FillEllipse(pupilBrush, this.positionX, this.positionY, this.size, this.size);
-            }
+               g.FillEllipse(pupilBrush, clientWidth, clientHeight, this.size, this.size);
         }
 
-        public void updatePupil(int positionX, int positionY)
+        public void updatePupil(Graphics g, int positionX, int positionY)
         {
-            if (positionX == 0 || positionY == 0)
-            {
-                g.FillEllipse(pupilBrush, this.positionX, this.positionY, this.size, this.size);
-            }
-            else
-            {
-                g.FillEllipse(pupilBrush, positionX, positionY, this.size, this.size);
-            }
+            //draw where the mouse pointer is present
+            g.FillEllipse(pupilBrush, positionX, positionY, this.size, this.size);
+            //graphics.Dispose();
+
+            //{
+            //    g.FillEllipse(pupilBrush, this.positionX, this.positionY, this.size, this.size);
+            //}
+            //else
+            //{
+                //MessageBox.Show("" + positionX + " " + positionY + " " + this.size);
           
         }
 
