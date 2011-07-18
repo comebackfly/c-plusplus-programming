@@ -9,45 +9,54 @@ namespace WatchingEyes
 {
     class Pupil
     {
-        private int positionX;
-        private int positionY;
+        private float positionX;
+        private float positionY;
         private int size;
-        private Graphics g;
-        private SolidBrush pupilBrush;
 
         public Pupil(int positionX, int positionY, int size)
         {
             this.size = size;
             this.positionX = positionX;
             this.positionY = positionY;
-            pupilBrush = new SolidBrush(Color.Blue);
+            
         }
 
-        public void paintPupil(Graphics g, int clientWidth, int clientHeight){
-            this.g = g;
+        public void paintPupil(Graphics g, int clientWidth, int clientHeight)
+        {
             // Create a new pen that we shall use for drawing the line
-               g.FillEllipse(pupilBrush, clientWidth, clientHeight, this.size, this.size);
+            SolidBrush pupilBrush = new SolidBrush(Color.Blue);
+            g.FillEllipse(pupilBrush, clientWidth, clientHeight, this.size, this.size);
+            pupilBrush.Dispose();
         }
 
-        public void updatePupil(Graphics g, int positionX, int positionY)
+        public void updatePupil(Graphics g, float positionX, float positionY, Boolean isVisible)
         {
-            //draw where the mouse pointer is present
-            g.FillEllipse(pupilBrush, positionX, positionY, this.size, this.size);
-            //graphics.Dispose();
-
-            //{
-            //    g.FillEllipse(pupilBrush, this.positionX, this.positionY, this.size, this.size);
-            //}
-            //else
-            //{
-                //MessageBox.Show("" + positionX + " " + positionY + " " + this.size);
-          
+            if (isVisible)
+            {
+                SolidBrush pupilBrush = new SolidBrush(Color.Blue);
+                this.positionX = positionX;
+                this.positionY = positionY;
+                g.FillEllipse(pupilBrush, positionX, positionY, this.size, this.size);
+                pupilBrush.Dispose();
+            }
         }
 
-        public void setUnvisible()
+        public void setUnvisible(Graphics g)
         {
-            SolidBrush invisible = new SolidBrush(Color.Teal);
-            g.FillEllipse(invisible, this.positionX, this.positionY, this.size, this.size);
+            SolidBrush invisible = new SolidBrush(Color.Black);
+            g.FillEllipse(invisible, this.positionX, this.positionY, 0, 0);
+            invisible.Dispose();
+
+        }
+
+        public float getPositionX()
+        {
+            return this.positionX;
+        }
+
+        public float getPositionY()
+        {
+            return this.positionY;
         }
     }
 }
