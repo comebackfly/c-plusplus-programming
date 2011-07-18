@@ -13,9 +13,15 @@ namespace WatchingEyes
     {
         private Eye leftEye;
         private Eye rightEye;
-        private Control control;
-        private Graphics graphics;
         private int eyeSize;
+        private int pupilSize;
+        private int mouseX = 0;
+        private int mouseY = 0;
+        private float x;
+        private float y;
+        private Boolean rightPupilClosed = true;
+        private Boolean leftPupilClosed = true;
+
 
         public Form1()
         {
@@ -27,101 +33,116 @@ namespace WatchingEyes
         {
             //create eyes with pupils
             eyeSize = 70;
-            int pupilSize = 10;
-            
-            leftEye = new Eye((ClientRectangle.Width/2)-eyeSize, ClientRectangle.Height/2, eyeSize);
+            pupilSize = 10;
+
+            leftEye = new Eye((ClientRectangle.Width / 2) - eyeSize, ClientRectangle.Height / 2, eyeSize);
             Pupil leftPupil = new Pupil(leftEye.getPositionX() + pupilSize / 2, leftEye.getPositionY() + pupilSize / 2, pupilSize);
             leftEye.setPupil(leftPupil);
 
-            
             rightEye = new Eye((ClientRectangle.Width / 2), ClientRectangle.Height / 2, eyeSize);
             Pupil rightPupil = new Pupil(rightEye.getPositionX() + pupilSize / 2, rightEye.getPositionY() + pupilSize / 2, pupilSize);
             rightEye.setPupil(rightPupil);
-
-            //this.graphics = CreateGraphics();
         }
 
         private void Form1_MouseMove(object sender, MouseEventArgs e)
         {
-
-            
-
-            //Point pt = Cursor.Position; // Get the mouse cursor in screen coordinates
-
-            //Graphics graphics = CreateGraphics();
-            label.Text = e.X.ToString() + ", " + e.Y.ToString();
-
-            //this.graphics.FillEllipse(new SolidBrush(Color.BlueViolet), pt.X-10, pt.Y-10, 4, 4);
-
-            //this.graphics.Dispose();
-
-            //if(e.X<=leftEye.getPositionX()+leftEye.getWidth() && e.X>=leftEye.getPositionX()&&e.Y<=leftEye.getPositionY()+leftEye.getWidth()&&e.Y>=leftEye.getPositionY()){
-            //leftEye.getPupil().updatePupil(this.graphics, e.X, e.Y);
-            //}
-            //else if (e.X <= rightEye.getPositionX() + rightEye.getWidth() && e.X >= rightEye.getPositionX() && e.Y <= rightEye.getPositionY() + rightEye.getWidth() && e.Y >= rightEye.getPositionY())
-            //{
-            //rightEye.getPupil().updatePupil(e.X, e.Y);
-            //}
+            mouseX = e.X;
+            mouseY = e.Y;
+            label.Text = "x: "+x.ToString() + ", y: " + y.ToString();
 
             Invalidate();
         }
 
         private void Form1_MouseLeave(object sender, EventArgs e)
         {
-            label.Text = "mouse leaving the window";
-
-            leftEye.close();
-            rightEye.close();
-        }
-
-        //private void Form1_Paint(object sender, PaintEventArgs e)
-        //{
-        //    // Get Graphics Object
-        //    Graphics g = e.Graphics;
-        //    leftEye.paintEye(g);
-        //    rightEye.paintEye(g);
-        //}
-
-        private void Form1_MouseClick(object sender, MouseEventArgs e)
-        {
-
-            switch (e.Button)
-            {
-                case MouseButtons.Left: leftEye.close();
-                    break;
-
-                case MouseButtons.Right: rightEye.close();
-                    break;
-            }
-
+            label.Text = "mouse leaving the window ";
+            Graphics graphics = CreateGraphics();
+            leftEye.close(graphics);
+            rightEye.close(graphics);
         }
 
         protected override void OnPaintBackground(PaintEventArgs e)
         {
             base.OnPaintBackground(e);
+            Graphics graphics = CreateGraphics();
 
-            leftEye.paintEye(e.Graphics, (ClientRectangle.Width / 2) - eyeSize, ClientRectangle.Height / 2);
-            rightEye.paintEye(e.Graphics, (ClientRectangle.Width/2), ClientRectangle.Height/2);
-
-            Point local = this.PointToClient(Cursor.Position);
-            //e.Graphics.DrawEllipse(Pens.Red, local.X - 25, local.Y - 25, 20, 20);
-
-            leftEye.updatePupil(e.Graphics, local.X-100, local.Y-100);
-
-        }
-
-        private void Form1_Resize(object sender, System.EventArgs e)
-        {
-            control = (Control)sender;
-
-            // Ensure the Form remains square (Height = Width).
-            if (control.Size.Height != control.Size.Width)
+            if (leftEye.isClosed())
             {
-                control.Size = new Size(control.Size.Width, control.Size.Width);
+                leftEye.close(graphics);
             }
 
-            Invalidate();
-            Console.WriteLine("Resize");
+            if (rightEye.isClosed())
+            {
+                rightEye.close(graphics);
+            }
+
+            //calculate eye-movement
+            float factor = eyeSize / 8;
+
+            x = this.mouseX - (ClientRectangle.Width / 2);
+            y = this.mouseY - (ClientRectangle.Height / 2);
+
+            float distance = (int)Math.Sqrt((x) * (x) + (y) * (y));
+
+            x /= distance;
+            y /= distance;
+
+            x *= factor;
+            y *= factor;
+
+            x += ClientRectangle.Width / 2;
+            y += ClientRectangle.Height / 2;
+
+            leftEye.paintEye(e.Graphics, (ClientRectangle.Width / 2) - eyeSize, ClientRectangle.Height / 2);
+            rightEye.paintEye(e.Graphics, (ClientRectangle.Width / 2), ClientRectangle.Height / 2);
+
+            leftEye.updatePupil(e.Graphics, x - (40), y + (12), leftPupilClosed);
+            rightEye.updatePupil(e.Graphics, x + (40), y + (12), rightPupilClosed);
         }
+
+        private void Form1_MouseClick(object sender, MouseEventArgs e)
+        {
+            switch (e.Button)
+            {
+                case MouseButtons.Left:
+                    if (leftEye.isClosed())
+                    {
+                        leftEye.setClosed(false);
+                        leftPupilClosed = true;
+                    }
+                    else
+                    {
+                        leftPupilClosed = false;
+                        leftEye.setClosed(true);
+                    }
+                    break;
+
+                case MouseButtons.Right:
+                    if (rightEye.isClosed())
+                    {
+                        rightPupilClosed = true;
+                        rightEye.setClosed(false);
+                    }
+                    else
+                    {
+                        rightPupilClosed = false;
+                        rightEye.setClosed(true);
+                    }
+                    break;
+            }
+        }
+
+        //private void Form1_Resize(object sender, System.EventArgs e)
+        //{
+        //    control = (Control)sender;
+
+        //    // Ensure the Form remains square (Height = Width).
+        //    if (control.Size.Height != control.Size.Width)
+        //    {
+        //        control.Size = new Size(control.Size.Width, control.Size.Width);
+        //    }
+
+        //    Invalidate();
+        //}
     }
 }
